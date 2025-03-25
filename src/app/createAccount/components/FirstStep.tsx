@@ -47,6 +47,11 @@ const page = ({
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
     setCurrentStep(currentStep + 1);
+    localStorage.setItem("name", values.username);
+    localStorage.setItem(
+      "image",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg"
+    );
   }
 
   return (

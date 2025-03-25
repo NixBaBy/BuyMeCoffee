@@ -20,26 +20,47 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 const SecondStep = () => {
+  const router = useRouter();
   const FormSchema = z.object({
-    country: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
+    country: z.string().min(1, { message: "Country selection is required." }),
+
     firstName: z.string().min(2, {
       message: "Username must be at least 2 characters.",
     }),
     lastName: z.string().min(2, {
       message: "Username must be at least 2 characters.",
     }),
+    card: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
+    expires: z.string().min(1, {
+      message: "Username must be at least 2 characters.",
+    }),
+    year: z.string().min(1, {
+      message: "Username must be at least 2 characters.",
+    }),
+    cvc: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
   });
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      country: "",
+      firstName: "",
+      lastName: "",
+      card: "",
+      expires: "",
+      year: "",
+      cvc: "",
+    },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    router.push("/");
   }
 
   return (
@@ -90,10 +111,10 @@ const SecondStep = () => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-bold">Username</FormLabel>
+                  <FormLabel className="font-bold">First name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter user name here"
+                      placeholder="Enter your name here"
                       {...field}
                       className="w-full"
                     />
@@ -107,13 +128,99 @@ const SecondStep = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-bold">lastName</FormLabel>
+                  <FormLabel className="font-bold">Last name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter user name here"
+                      placeholder="Enter your name here"
                       {...field}
                       className="w-full"
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="card"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">
+                  Enter your card number
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="XXXX-XXXX-XXXX-XXXX"
+                    {...field}
+                    className="w-full"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex gap-[16px]">
+            <FormField
+              control={form.control}
+              name="expires"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Expires</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Month" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="w-full">
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Year" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="w-full">
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cvc"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-bold">
+                    Enter your card number
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="CVC" {...field} className="w-full" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
