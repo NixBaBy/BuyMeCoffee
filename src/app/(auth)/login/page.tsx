@@ -14,10 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { useUser } from "@/app/_context/UsersContext";
 
 const page = () => {
-  const router = useRouter();
+  const { loginUser } = useUser();
   const formSchema = z.object({
     email: z.string().email(),
     password: z
@@ -44,23 +44,6 @@ const page = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     loginUser(values.email, values.password);
   }
-
-  const loginUser = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:3000/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    console.log("data", data);
-    if (data.error) {
-      alert(data.message);
-    } else {
-      router.push("/createAccount");
-    }
-  };
 
   return (
     <div className="w-[359px] flex flex-col gap-[24px]">

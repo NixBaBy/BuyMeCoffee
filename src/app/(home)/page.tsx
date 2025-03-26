@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import React from "react";
@@ -8,8 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUser } from "../_context/UsersContext";
 
 const page = () => {
+  const { users } = useUser();
+  console.log(users);
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-full">
       <div className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]">
@@ -63,7 +67,38 @@ const page = () => {
           </SelectContent>
         </Select>
       </div>
-      <div className="p-6 flex flex-col items-start gap-4 rounded-lg border border-solid border-[#E4E4E7]"></div>
+      <div className="p-6 flex flex-col items-start gap-4 rounded-lg border border-solid border-[#E4E4E7]">
+        {users.map((user) => {
+          return (
+            <div key={user.id} className="w-full flex flex-col gap-4">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex gap-3 items-center">
+                  <img
+                    src={user.image}
+                    alt=""
+                    className="w-[32px] h-[32px]  rounded-full"
+                  />
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="font-bold">{user.username}</p>
+                    <p className="text-[12px] text-[#09090B]">
+                      {user.receivedDonations.socialMediaURLOrBuyMeCoffee}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p className="font-bold flex flex-col gap-[4px]">
+                    + ${user.receivedDonations.amount}
+                  </p>
+                  <p>10 hours ago</p>
+                </div>
+              </div>
+              <p className="text-[14px] ">
+                {user.receivedDonations.specialMessage}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

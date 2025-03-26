@@ -23,8 +23,6 @@ const Header = () => {
     setUserData({ name, image });
   }, []);
 
-  console.log(userData);
-
   const logoutHandler = () => {
     router.push("/login");
     localStorage.removeItem("name");

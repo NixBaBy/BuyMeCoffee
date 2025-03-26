@@ -19,13 +19,15 @@ const Sidebar = () => {
             <p>Home</p>
           </ToggleGroupItem>
         </Link>
-        <ToggleGroupItem
-          value="italic"
-          aria-label="Toggle italic"
-          className="h-[36px] py-2"
-        >
-          <p>Explore</p>
-        </ToggleGroupItem>
+        <Link href="/explore">
+          <ToggleGroupItem
+            value="italic"
+            aria-label="Toggle italic"
+            className="h-[36px] py-2"
+          >
+            <p>Explore</p>
+          </ToggleGroupItem>
+        </Link>
         <ToggleGroupItem
           value="strikethrough"
           aria-label="Toggle strikethrough"
