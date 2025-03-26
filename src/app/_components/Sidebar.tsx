@@ -12,7 +12,7 @@ const Sidebar = () => {
       >
         <Link href="/">
           <ToggleGroupItem
-            value="bold"
+            value="Home"
             aria-label="Toggle bold"
             className="h-[36px] py-2"
           >
@@ -21,30 +21,34 @@ const Sidebar = () => {
         </Link>
         <Link href="/explore">
           <ToggleGroupItem
-            value="italic"
+            value="Explore"
             aria-label="Toggle italic"
             className="h-[36px] py-2"
           >
             <p>Explore</p>
           </ToggleGroupItem>
         </Link>
-        <ToggleGroupItem
-          value="strikethrough"
-          aria-label="Toggle strikethrough"
-          className="h-[36px] py-2"
-        >
-          <div className="flex items-center gap-2">
-            <p>View page</p>
-            <ExternalLink />
-          </div>
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="strikethrough"
-          aria-label="Toggle strikethrough"
-          className="h-[36px] py-2"
-        >
-          <p>Account settings</p>
-        </ToggleGroupItem>
+        <Link href="/view-page">
+          <ToggleGroupItem
+            value="ViewPage"
+            aria-label="Toggle strikethrough"
+            className="h-[36px] py-2"
+          >
+            <div className="flex items-center gap-2">
+              <p>View page</p>
+              <ExternalLink />
+            </div>
+          </ToggleGroupItem>
+        </Link>
+        <Link href="/account-settings">
+          <ToggleGroupItem
+            value="AccountSettings"
+            aria-label="Toggle strikethrough"
+            className="h-[36px] py-2"
+          >
+            <p>Account settings</p>
+          </ToggleGroupItem>
+        </Link>
       </ToggleGroup>
     </div>
   );

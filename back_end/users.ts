@@ -1,10 +1,10 @@
 export const getUsers = () => {
   return [
     {
+      id: "1",
       email: "tuuguu123123@gmail.com",
       password: "AaBb1010",
       username: "god",
-      id: "1",
       receivedDonations: {
         id: "1",
         amount: "1",
@@ -19,7 +19,7 @@ export const getUsers = () => {
         about:
           "bi bol mundag hun  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo natus odio non magni sed dolore, aliquid ipsum dolorum quasi omnis facere labore nam, aspernatur quos a voluptates porro. Sed, assumenda.",
         image:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg",
+          "https://static.vecteezy.com/system/resources/thumbnails/001/330/664/small_2x/thunder-zeus-god-artwork-vector.jpg",
         socialMediaURL: "www.facebook.com",
         backgroundImage: "",
         successsMessage: "asdasd",
@@ -44,8 +44,6 @@ export const getUsers = () => {
       password: "AaBb1010",
       id: "2",
       username: "hulan",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg",
       receivedDonations: {
         id: "2",
         amount: "2",
@@ -59,7 +57,7 @@ export const getUsers = () => {
         about:
           "bi bol mundag huniig tanidg   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo natus odio non magni sed dolore, aliquid ipsum dolorum quasi omnis facere labore nam, aspernatur quos a voluptates porro. Sed, assumenda.",
         image:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg",
+          "https://img.freepik.com/free-vector/vintage-pretty-girl-ornate-crown_225004-1458.jpg",
         socialMediaURL: "www.facebook.com",
         backgroundImage: "",
         successsMessage: "asdasd",
@@ -84,8 +82,6 @@ export const getUsers = () => {
       password: "AaBb1010",
       id: "3",
       username: "baaska",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg",
       receivedDonations: {
         id: "3",
         amount: "3",
@@ -99,7 +95,7 @@ export const getUsers = () => {
         about:
           "bi bol mundag hun   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo natus odio non magni sed dolore, aliquid ipsum dolorum quasi omnis facere labore nam, aspernatur quos a voluptates porro. Sed, assumenda.",
         image:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Cima_da_Conegliano%2C_God_the_Father.jpg/300px-Cima_da_Conegliano%2C_God_the_Father.jpg",
+          "https://img.freepik.com/free-vector/realistic-hand-drawn-fuck-you-symbol_23-2148684365.jpg",
         socialMediaURL: "www.facebook.com",
         backgroundImage: "",
         successsMessage: "asdasd",

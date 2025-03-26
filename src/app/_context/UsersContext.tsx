@@ -12,6 +12,7 @@ import { userType } from "../../../utils/types";
 type userContextType = {
   loginUser: (email: string, password: string) => void;
   users: userType[];
+  logedUser: string | null;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -21,6 +22,7 @@ export const useUser = () => {
 
 const UsersProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<userType[]>([]);
+  const [logedUser, setLogedUser] = useState<string | null>(null);
   const router = useRouter();
 
   const getData = async () => {
@@ -38,21 +40,28 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
-
     if (data.error) {
       alert(data.message);
     } else {
       router.push("/createAccount");
+      localStorage.setItem("user", data.user.id);
     }
     getData();
   };
-
   useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setLogedUser(storedUser);
+      }
+    } catch (error) {
+      console.error("Error reading user from localStorage:", error);
+    }
     getData();
   }, []);
-
+  console.log(logedUser);
   return (
-    <userContext.Provider value={{ loginUser, users }}>
+    <userContext.Provider value={{ loginUser, users, logedUser }}>
       {children}
     </userContext.Provider>
   );

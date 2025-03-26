@@ -27,7 +27,10 @@ export async function checkUser({
       }
     );
   }
-  return new Response(JSON.stringify({ message: "amjilttai newterlee" }), {
-    status: 200,
-  });
+  return new Response(
+    JSON.stringify({ message: "amjilttai newterlee", user }),
+    {
+      status: 200,
+    }
+  );
 }
