@@ -22,7 +22,6 @@ const page = () => {
   const { users, logedUser } = useUser();
   const currentUser = users.find((user) => user.id === logedUser);
 
-  // Filter хэрэглэгчийг олох, хэрэв байгаа бол
   const donationFound = users.filter(
     (user) => user.receivedDonations.amount === selectedValue
   );

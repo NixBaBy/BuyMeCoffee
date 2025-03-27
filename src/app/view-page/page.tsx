@@ -19,7 +19,7 @@ const page = () => {
           Add a cover image
         </Button>
       </div>
-      <div className="w-[90%] flex justify-center gap-[40px] mt-[-86px]">
+      <div className="w-screen px-[80px] flex justify-center gap-[40px] mt-[-86px]">
         <div className="flex flex-col gap-[20px]">
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <div className="flex gap-3 w-full">

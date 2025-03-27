@@ -12,13 +12,7 @@ import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
 
 const Header = () => {
-  const { logedUser } = useUser();
-  const router = useRouter();
-
-  const logoutHandler = () => {
-    router.push("/login");
-    localStorage.clear();
-  };
+  const { logedUser, logoutHandler } = useUser();
 
   return (
     <div className="flex justify-between items-center absolute top-1 w-full px-[80px]">

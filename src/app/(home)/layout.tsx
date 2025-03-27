@@ -1,9 +1,16 @@
+"use client";
 import React, { ReactNode } from "react";
 import Sidebar from "../_components/Sidebar";
+import { useUser } from "../_context/UsersContext";
 type Props = {
   children: ReactNode;
 };
-const Authlayout = (props: Props) => {
+const HomeLayout = (props: Props) => {
+  const { logedUser } = useUser();
+
+  if (!logedUser) {
+    return;
+  }
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-[24px] w-full">
@@ -14,4 +21,4 @@ const Authlayout = (props: Props) => {
   );
 };
 
-export default Authlayout;
+export default HomeLayout;
