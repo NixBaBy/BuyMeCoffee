@@ -39,7 +39,7 @@ const SecondStep = () => {
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     router.push("/login");
   }
   return (

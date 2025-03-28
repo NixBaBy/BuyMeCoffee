@@ -34,7 +34,7 @@ const page = ({
       username: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     setCurrentStep(currentStep + 1);
   }
   return (

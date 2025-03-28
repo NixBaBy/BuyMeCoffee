@@ -6,6 +6,7 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { userType } from "../../../../utils/types";
+import Link from "next/link";
 
 const Page = () => {
   const [searchValue, setSearchValue] = useState<userType[]>([]);
@@ -46,10 +47,12 @@ const Page = () => {
                     {user.profile.name}
                   </p>
                 </div>
-                <Button className="bg-secondary text-black">
-                  View Profile
-                  <ExternalLink />
-                </Button>
+                <Link href={`/donation-screen/${user.id}`}>
+                  <Button className="bg-secondary text-black">
+                    View Profile
+                    <ExternalLink />
+                  </Button>
+                </Link>
               </div>
               <div className="flex gap-6">
                 <div className="flex flex-col gap-[14px]">

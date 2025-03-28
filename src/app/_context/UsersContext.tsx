@@ -75,7 +75,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setLogedUser(null);
   };
-  console.log(logedUser);
+
   return (
     <userContext.Provider
       value={{ loginUser, users, logedUser, logoutHandler }}

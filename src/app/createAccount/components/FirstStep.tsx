@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 
 const page = ({
   setCurrentStep,
@@ -24,7 +23,6 @@ const page = ({
   setCurrentStep: Dispatch<number>;
   currentStep: number;
 }) => {
-  const router = useRouter();
   const formSchema = z.object({
     username: z.string().min(2, {
       message: "Username must be at least 2 characters.",

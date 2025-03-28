@@ -1,13 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
 

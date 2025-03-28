@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import React from "react";
 import ChangePassword from "./components/ChangePassword";
 import PaymentChange from "./components/PaymentChange";

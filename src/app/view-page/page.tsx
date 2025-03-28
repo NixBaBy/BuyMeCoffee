@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const page = () => {
+const ViewPage = () => {
   const { users, logedUser } = useUser();
   const currentUser = users.find((user) => user.id === logedUser);
 
@@ -95,4 +95,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ViewPage;
