@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/_context/UsersContext";
 
-const SecondStep = () => {
+const SecondStep = ({ name }: { name: string }) => {
+  const { signUp } = useUser();
   const router = useRouter();
   const formSchema = z.object({
     email: z.string().email(),
@@ -39,8 +41,9 @@ const SecondStep = () => {
       password: "",
     },
   });
-  function onSubmit() {
-    router.push("/login");
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values.email, values.password, name);
+    signUp(values.email, values.password, name);
   }
   return (
     <div className="flex flex-col gap-[24px]">

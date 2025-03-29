@@ -14,6 +14,7 @@ type userContextType = {
   users: userType[];
   logedUser: string | null;
   logoutHandler: () => void;
+  signUp: (email: string, password: string, username: string) => void;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -34,7 +35,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const loginUser = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:3000/api/users", {
+    const response = await fetch("http://localhost:3000/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +55,30 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     getData();
+  };
+  const signUp = async (email: string, password: string, username: string) => {
+    const response = await fetch("http://localhost:3000/api/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password, username }),
+    });
+    if (!response.ok) {
+      console.error("Серверээс алдаа ирлээ:", response.status);
+      return;
+    }
+    try {
+      const data = await response.json();
+      if (data.error) {
+        alert(data.message);
+      } else {
+        router.push("/login");
+      }
+      getData();
+    } catch (error) {
+      console.error("JSON-ийг унших үед алдаа гарсан:", error);
+    }
   };
   useEffect(() => {
     try {
@@ -78,7 +103,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <userContext.Provider
-      value={{ loginUser, users, logedUser, logoutHandler }}
+      value={{ loginUser, users, logedUser, logoutHandler, signUp }}
     >
       {children}
     </userContext.Provider>

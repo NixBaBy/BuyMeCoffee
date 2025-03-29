@@ -15,6 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useProfile } from "@/app/_context/ProfileContext";
+import { useUser } from "@/app/_context/UsersContext";
 
 const page = ({
   setCurrentStep,
@@ -23,6 +25,10 @@ const page = ({
   setCurrentStep: Dispatch<number>;
   currentStep: number;
 }) => {
+  const { createProfile } = useProfile();
+  const { logedUser } = useUser();
+  const userId = logedUser ? parseInt(logedUser, 10) : 0;
+
   const formSchema = z.object({
     username: z.string().min(2, {
       message: "Username must be at least 2 characters.",
@@ -44,6 +50,7 @@ const page = ({
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
+    createProfile("", values.username, values.about, values.mediaUrl, userId);
     setCurrentStep(currentStep + 1);
     localStorage.setItem("name", values.username);
     localStorage.setItem(
@@ -94,7 +101,6 @@ const page = ({
                       <Input
                         placeholder="Write about yourself here"
                         {...field}
-                        type="password"
                         className="w-full"
                       />
                     </FormControl>
@@ -114,7 +120,6 @@ const page = ({
                       <Input
                         placeholder="https://"
                         {...field}
-                        type="password"
                         className="w-full"
                       />
                     </FormControl>

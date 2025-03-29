@@ -18,9 +18,13 @@ import { Input } from "@/components/ui/input";
 const page = ({
   currentStep,
   setCurrentStep,
+  name,
+  setName,
 }: {
   currentStep: number;
   setCurrentStep: Dispatch<number>;
+  name: string;
+  setName: Dispatch<string>;
 }) => {
   const formSchema = z.object({
     username: z.string().min(2, {
@@ -34,8 +38,9 @@ const page = ({
       username: "",
     },
   });
-  function onSubmit() {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     setCurrentStep(currentStep + 1);
+    setName(values.username);
   }
   return (
     <div className="flex flex-col gap-[24px] w-[359px]">

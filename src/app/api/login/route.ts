@@ -1,4 +1,4 @@
-import { checkUser } from "../../../../back_end/service/userService";
+import { checkUser } from "../../../../back_end/service/signInService";
 import { getUsers } from "../../../../back_end/users";
 
 export async function GET() {
