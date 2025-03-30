@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -21,8 +22,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/_context/UsersContext";
+import { useBankCard } from "@/app/_context/BankCardContext";
 
 const SecondStep = () => {
+  const { createBankCard } = useBankCard();
+  const { logedUser } = useUser();
+  const userId = logedUser ? parseInt(logedUser, 10) : 0;
+  console.log(userId);
   const router = useRouter();
   const FormSchema = z.object({
     country: z.string().min(1, { message: "Country selection is required." }),
@@ -59,7 +66,17 @@ const SecondStep = () => {
     },
   });
 
-  function onSubmit() {
+  function onSubmit(values: z.infer<typeof FormSchema>) {
+    const expiryDate = `${values.year}-${values.expires.padStart(2, "0")}-01`;
+    createBankCard(
+      values.country,
+      values.firstName,
+      values.lastName,
+      values.card,
+      expiryDate,
+      userId,
+      values.cvc
+    );
     router.push("/");
   }
 
@@ -202,9 +219,9 @@ const SecondStep = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="w-full">
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="1">1994</SelectItem>
+                      <SelectItem value="2">1995</SelectItem>
+                      <SelectItem value="3">1996</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

@@ -6,9 +6,11 @@ import ChangePassword from "./components/ChangePassword";
 import PaymentChange from "./components/PaymentChange";
 import { useUser } from "@/app/_context/UsersContext";
 import { Camera } from "lucide-react";
+import { useProfile } from "@/app/_context/ProfileContext";
 
 const page = () => {
   const { users, logedUser } = useUser();
+
   const currentUser = users.find((user) => user.id === logedUser);
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-[650px]">

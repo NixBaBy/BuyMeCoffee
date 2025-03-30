@@ -1,16 +1,8 @@
-import { checkUser } from "../../../../back_end/service/signInService";
-import { getUsers } from "../../../../back_end/users";
+import { PrismaClient } from "@prisma/client";
 
-export async function GET() {
-  const users = await getUsers();
+const prisma = new PrismaClient();
 
-  return new Response(JSON.stringify({ data: users }));
-}
-
-export async function POST(req: Request) {
-  const body = await req.json();
-  return await checkUser({
-    username: body.email,
-    password: body.password,
-  });
+export async function getUsers() {
+  const users = await prisma.user.findMany(); // Бүх хэрэглэгчийг авах
+  return users;
 }

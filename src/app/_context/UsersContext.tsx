@@ -29,7 +29,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const getData = async () => {
-    const res = await fetch(`http://localhost:3000/api/users`);
+    const res = await fetch(`http://localhost:3000/api/login`);
     const data = await res.json();
     setUsers(data.data);
   };
@@ -43,6 +43,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
+
     if (data.error) {
       alert(data.message);
     } else {
@@ -93,7 +94,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Error reading user from localStorage:", error);
     }
-  }, []);
+  }, [logedUser]);
 
   const logoutHandler = () => {
     router.push("/login");
