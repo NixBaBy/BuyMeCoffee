@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/popover";
 import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
+import Image from "next/image";
 
 const Header = () => {
-  const { users, logoutHandler } = useUser();
+  const { loggedInUser, logoutHandler } = useUser();
 
   return (
     <div className="flex justify-between items-center absolute top-1 w-full px-[80px]">
@@ -20,14 +21,16 @@ const Header = () => {
           <p className="font-bold">Buy Me Coffee</p>
         </div>
       </Link>
-      {users ? (
+      {loggedInUser ? (
         <div className="flex gap-2 py-2 px-4 items-center">
-          <img
-            src={users[0]?.profile.avatarImage || "/defaultImage.jpg"}
+          <Image
+            width={40}
+            height={40}
+            src={loggedInUser?.profile?.avatarImage || "/defaultImage.jpg"}
             alt="User Avatar"
-            className="w-[40px] h-[40px] rounded-full"
+            className=" rounded-full"
           />
-          <p>{users[0]?.profile.name}</p>
+          <p>{loggedInUser?.profile?.name}</p>
           <Popover>
             <PopoverTrigger>
               <ChevronDown />

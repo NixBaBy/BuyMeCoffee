@@ -8,8 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const ViewPage = () => {
-  const { users } = useUser();
+  const { loggedInUser } = useUser();
 
+  if (!loggedInUser?.profile) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="w-full pt-[60px]">
       <div className="w-full h-[319px] bg-gray-200 flex justify-center items-center">
@@ -19,40 +22,41 @@ const ViewPage = () => {
         </Button>
       </div>
       <div className="w-screen px-[80px] flex justify-center gap-[40px] mt-[-86px]">
-        {users.map((user) => {
-          return (
-            <div className="flex flex-col gap-[20px]" key={user.id}>
-              <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
-                <div className="flex gap-3 w-full">
-                  <Image
-                    src={user?.profile.avatarImage || "/placeholder.jpg"}
-                    width={48}
-                    height={48}
-                    alt=""
-                    className="rounded-full"
-                  />
-                  <p className="font-bold text-[20px]">{user?.profile.name}</p>
-                </div>
-                <div className="w-full bg-gray-200 h-[1px]"></div>
-                <div className="flex flex-col gap-3">
-                  <p className="font-bold">About {user?.profile.name}</p>
-                  <p>{user?.profile.about}</p>
-                </div>
-              </div>
-              <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
-                <p className="font-bold">Social media URL</p>
-                <p className="text-[14px]">{user?.profile.socialMediaURL}</p>
-              </div>
-              <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
-                <p className="font-bold">Recent Supporters</p>
-                <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
-                  <Heart />
-                  <p>Be the first one to support {user?.profile.name}</p>
-                </div>
-              </div>
+        <div className="flex flex-col gap-[20px] w-full">
+          <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
+            <div className="flex gap-3 w-full">
+              <Image
+                src={loggedInUser?.profile.avatarImage || "/placeholder.jpg"}
+                width={48}
+                height={48}
+                alt=""
+                className="rounded-full"
+              />
+              <p className="font-bold text-[20px]">
+                {loggedInUser?.profile.name}
+              </p>
             </div>
-          );
-        })}
+            <div className="w-full bg-gray-200 h-[1px]"></div>
+            <div className="flex flex-col gap-3">
+              <p className="font-bold">About {loggedInUser?.profile.name}</p>
+              <p>{loggedInUser?.profile.about}</p>
+            </div>
+          </div>
+          <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
+            <p className="font-bold">Social media URL</p>
+            <p className="text-[14px]">
+              {loggedInUser?.profile.socialMediaURL}
+            </p>
+          </div>
+          <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
+            <p className="font-bold">Recent Supporters</p>
+            <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
+              <Heart />
+              <p>Be the first one to support {loggedInUser?.profile.name}</p>
+            </div>
+          </div>
+        </div>
+
         <div className="p-6 gap-6 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
           <p>Buy Space ranger a Coffee</p>
           <div className="flex flex-col gap-2">

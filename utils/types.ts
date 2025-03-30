@@ -1,37 +1,45 @@
 export type userType = {
+  id: number;
   email: string;
   password: string;
-  id: string;
-  username: string;
-  image: string;
-  receivedDonations: {
-    id: string;
-    amount: string;
-    specialMessage: string;
-    socialMediaURLOrBuyMeCoffee: string;
-    donorId: string;
-  };
+  username: string | null;
+  receivedDonations: receivedDonationsType[];
+  profile: profileType | null;
+  bankCard: BankCardType | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type receivedDonationsType = {
+  id: number;
+  amount: number;
+  specialMessage: string;
+  socialMediaURLOrBuyMeCoffee: string;
+  donorId: number;
+};
+
+type profileType = {
+  id: number;
+  name: string;
+  about: string;
+  avatarImage: string;
+  socialMediaURL: string;
+  backgroundImage: string;
+  successMessage: string;
+  userId: number;
   createdAt: string;
-  profile: {
-    name: string;
-    about: string;
-    image: string;
-    socialMediaURL: string;
-    backgroundImage: string;
-    successsMessage: string;
-    userId: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  BankCard: {
-    id: string;
-    country: string;
-    firstName: string;
-    lastName: string;
-    cardNumber: string;
-    expiryDate: string;
-    userId: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  updatedAt: string;
+};
+
+type BankCardType = {
+  id: number;
+  country: string;
+  firstName: string;
+  lastName: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvc: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
 };

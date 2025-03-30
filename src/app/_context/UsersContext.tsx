@@ -16,6 +16,7 @@ type userContextType = {
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
   changePassword: (email: string, password: string) => {};
+  loggedInUser: userType;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -53,7 +54,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.setItem("user", data.user.id);
       setLogedUser(data.user);
-      if (data.user.profile) {
+      if (!data.user.profile) {
         router.push("/");
       } else {
         router.push("/createAccount");
@@ -112,7 +113,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      router.push("/login");
+      // router.push("/sign-up");
     } catch (error) {
       console.error("Error reading user from localStorage:", error);
     }
@@ -123,6 +124,9 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setLogedUser(null);
   };
+  const userId: number | null = logedUser ? Number(logedUser) : null;
+  const loggedInUser =
+    userId !== null ? users.find((user) => user.id === userId) : null;
 
   return (
     <userContext.Provider
@@ -133,6 +137,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         logoutHandler,
         signUp,
         changePassword,
+        loggedInUser,
       }}
     >
       {children}

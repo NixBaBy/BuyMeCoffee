@@ -19,37 +19,36 @@ const page = () => {
     setSelectedValue(value);
   };
 
-  const { users, logedUser } = useUser();
+  const { loggedInUser } = useUser();
 
-  const loggedInUser = users.find((user) => user.id === logedUser);
-  const donationFound = users.filter(
-    (user) => user.receivedDonations.amount === selectedValue
-  );
+  if (!loggedInUser?.profile) {
+    return <p>Loading...</p>;
+  }
+  // const donationFound = users.filter(
+  //   (user) => user.receivedDonations. === selectedValue
+  // );
 
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-full">
       <div className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]">
-        <div>
-          {loggedInUser && (
-            <div className="flex justify-between items-center w-full">
-              <div className="flex gap-3 items-center">
-                <img
-                  src={loggedInUser.profile.image || "defaultImage.jpg"}
-                  alt=""
-                  className="w-[48px] h-[48px] rounded-[48px] "
-                />
-                <div className="flex flex-col gap-[4px]">
-                  <p className="font-bold">{loggedInUser.profile.name}</p>
-                  <p>{loggedInUser.profile.socialMediaURL}</p>
-                </div>
-              </div>
-              <Button>
-                <Copy />
-                Share page link
-              </Button>
+        <div className="flex justify-between items-center w-full ">
+          <div className="flex gap-3 items-center">
+            <img
+              src={loggedInUser.profile.avatarImage || "defaultImage.jpg"}
+              alt=""
+              className="w-[48px] h-[48px] rounded-[48px] "
+            />
+            <div className="flex flex-col gap-[4px]">
+              <p className="font-bold">{loggedInUser.profile.name}</p>
+              <p>{loggedInUser.profile.socialMediaURL}</p>
             </div>
-          )}
+          </div>
+          <Button>
+            <Copy />
+            Share page link
+          </Button>
         </div>
+
         <div className="my-4 border w-full bg-gray-200 h-[1px]"></div>
         <div className="flex flex-col gap-6">
           <div className="flex gap-4 items-center">
@@ -89,7 +88,7 @@ const page = () => {
           </SelectContent>
         </Select>
       </div>
-      <div className="p-6 flex flex-col items-start gap-4 rounded-lg border border-solid border-[#E4E4E7]">
+      {/* <div className="p-6 flex flex-col items-start gap-4 rounded-lg border border-solid border-[#E4E4E7]">
         {donationFound.length === 0
           ? users.map((user) => {
               return (
@@ -97,14 +96,14 @@ const page = () => {
                   <div className="flex items-center justify-between w-full">
                     <div className="flex gap-3 items-center">
                       <img
-                        src={user.profile.image}
+                        src={user.profile.avatarImage}
                         alt=""
                         className="w-[32px] h-[32px]  rounded-full"
                       />
                       <div className="flex flex-col gap-[4px]">
-                        <p className="font-bold">{user.username}</p>
+                        <p className="font-bold">{user.profile.name}</p>
                         <p className="text-[12px] text-[#09090B]">
-                          {user.receivedDonations.socialMediaURLOrBuyMeCoffee}
+                          {user.profile.socialMediaURL}
                         </p>
                       </div>
                     </div>
@@ -151,7 +150,7 @@ const page = () => {
                 </div>
               );
             })}
-      </div>
+      </div> */}
     </div>
   );
 };

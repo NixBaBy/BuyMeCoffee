@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,9 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/app/_context/UsersContext";
+import { RefreshCcw } from "lucide-react"; // spinner
 
 const page = () => {
   const { loginUser } = useUser();
+  const [loading, setLoading] = useState(false); // Loading state нэмсэн
   const formSchema = z.object({
     email: z.string().email(),
     password: z
@@ -41,56 +42,71 @@ const page = () => {
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     localStorage.setItem("email", values.email);
-    loginUser(values.email, values.password);
+    await loginUser(values.email, values.password);
+    setLoading(false);
   }
 
   return (
-    <div className="w-[359px] flex flex-col gap-[24px]">
-      <p className="text-[24px] font-bold">Welcome back</p>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-bold">Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter email  here"
-                    {...field}
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-bold">Password</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter password  here"
-                    {...field}
-                    type="password"
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-full bg-[#18181B] text-white">
-            Continue
-          </Button>
-        </form>
-      </Form>
+    <div className="w-full h-screen flex flex-col justify-center items-center relative">
+      {loading && (
+        <div className="absolute flex justify-center items-center inset-0 bg-gray-500 bg-opacity-50">
+          <RefreshCcw className="animate-spin w-16 h-16 text-white" />
+        </div>
+      )}
+
+      <div className="w-[359px] flex flex-col gap-[24px]">
+        <p className="text-[24px] font-bold">Welcome back</p>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-bold">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter email here"
+                      {...field}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-bold">Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter password here"
+                      {...field}
+                      type="password"
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full bg-[#18181B] text-white"
+              disabled={loading} // Loading байвал товчийг идэвхгүй болгох
+            >
+              Continue
+            </Button>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 };

@@ -21,8 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useBankCard } from "@/app/_context/BankCardContext";
+import { useUser } from "@/app/_context/UsersContext";
 
 const PaymentChange = () => {
+  const { changeBankCard } = useBankCard();
+  const { logedUser, loggedInUser } = useUser();
+  console.log(loggedInUser);
   const formSchema = z.object({
     country: z.string().min(1, { message: "Country selection is required." }),
 
@@ -49,18 +54,28 @@ const PaymentChange = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      country: "",
-      firstName: "",
-      lastName: "",
-      card: "",
+      country: loggedInUser.bankCard?.country || "",
+      firstName: loggedInUser.bankCard?.firstName || "",
+      lastName: loggedInUser.bankCard?.lastName || "",
+      card: loggedInUser.bankCard?.cardNumber || "",
       expires: "",
       year: "",
-      cvc: "",
+      cvc: loggedInUser.bankCard?.cvc || "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const expiryDate = `${values.year}-${values.expires.padStart(2, "0")}-01`;
+    const userId = Number(logedUser);
+    changeBankCard(
+      values.country,
+      values.firstName,
+      values.lastName,
+      values.card,
+      expiryDate,
+      userId,
+      values.cvc
+    );
   }
   return (
     <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">
@@ -121,11 +136,7 @@ const PaymentChange = () => {
                 <FormItem>
                   <FormLabel className="font-bold">Last name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter your name here"
-                      {...field}
-                      className="w-full"
-                    />
+                    <Input {...field} className="w-full" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -193,9 +204,9 @@ const PaymentChange = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="w-full">
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="1">1994</SelectItem>
+                      <SelectItem value="2">1995</SelectItem>
+                      <SelectItem value="3">1996</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
