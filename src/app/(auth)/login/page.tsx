@@ -42,6 +42,7 @@ const page = () => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
+    localStorage.setItem("email", values.email);
     loginUser(values.email, values.password);
   }
 

@@ -14,8 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/app/_context/UsersContext";
 
 const ChangePassword = () => {
+  const { changePassword } = useUser();
+  const email = localStorage.getItem("email");
   const formSchema = z
     .object({
       password: z.string().min(2, {
@@ -39,6 +42,11 @@ const ChangePassword = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!email) {
+      console.error("Email олдсонгүй! Нэвтрэх шаардлагатай.");
+    } else {
+      changePassword(email, values.password);
+    }
     console.log(values);
   }
   return (

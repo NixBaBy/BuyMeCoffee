@@ -11,7 +11,6 @@ import Link from "next/link";
 const Page = () => {
   const [searchValue, setSearchValue] = useState<userType[]>([]);
   const { users } = useUser();
-
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const search = users.filter((user) =>
       user.profile.name.toLowerCase().includes(e.target.value.toLowerCase())
@@ -29,7 +28,7 @@ const Page = () => {
       />
 
       {searchValue.length == 0
-        ? users.map((user) => (
+        ? users?.map((user) => (
             <div
               className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]"
               key={user.id}
@@ -39,11 +38,11 @@ const Page = () => {
                   <Image
                     width={40}
                     height={40}
-                    src={user.profile.image}
+                    src={user.profile.avatarImage || "/defaultImage.jpg"}
                     alt={user.profile.name}
                     className="rounded-full"
                   />
-                  <p className="text-[20px] font-bold tracking-[-0.5px]">
+                  <p className="text-[20px] font-bold tracking-[-0.5px] object-cover">
                     {user.profile.name}
                   </p>
                 </div>

@@ -20,8 +20,8 @@ const page = () => {
   };
 
   const { users, logedUser } = useUser();
-  const currentUser = users.find((user) => user.id === logedUser);
 
+  const loggedInUser = users.find((user) => user.id === logedUser);
   const donationFound = users.filter(
     (user) => user.receivedDonations.amount === selectedValue
   );
@@ -29,22 +29,26 @@ const page = () => {
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-full">
       <div className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]">
-        <div className="flex justify-between items-center w-full">
-          <div className="flex gap-3 items-center">
-            <img
-              src={currentUser?.profile.image}
-              alt=""
-              className="w-[48px] h-[48px] rounded-[48px] "
-            />
-            <div className="flex flex-col gap-[4px]">
-              <p className="font-bold">{currentUser?.profile.name}</p>
-              <p>{currentUser?.profile.socialMediaURL}</p>
+        <div>
+          {loggedInUser && (
+            <div className="flex justify-between items-center w-full">
+              <div className="flex gap-3 items-center">
+                <img
+                  src={loggedInUser.profile.image || "defaultImage.jpg"}
+                  alt=""
+                  className="w-[48px] h-[48px] rounded-[48px] "
+                />
+                <div className="flex flex-col gap-[4px]">
+                  <p className="font-bold">{loggedInUser.profile.name}</p>
+                  <p>{loggedInUser.profile.socialMediaURL}</p>
+                </div>
+              </div>
+              <Button>
+                <Copy />
+                Share page link
+              </Button>
             </div>
-          </div>
-          <Button>
-            <Copy />
-            Share page link
-          </Button>
+          )}
         </div>
         <div className="my-4 border w-full bg-gray-200 h-[1px]"></div>
         <div className="flex flex-col gap-6">

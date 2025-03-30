@@ -15,6 +15,7 @@ type userContextType = {
   logedUser: string | null;
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
+  changePassword: (email: string, password: string) => {};
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -30,8 +31,12 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
 
   const getData = async () => {
     const res = await fetch(`http://localhost:3000/api/login`);
+    if (!res.ok) {
+      console.error("Алдаа гарлаа:", res.status);
+      return;
+    }
     const data = await res.json();
-    setUsers(data.data);
+    setUsers(data.data); // data.data дотор хэрэглэгчийн жагсаалт байх ёстой
   };
 
   const loginUser = async (email: string, password: string) => {
@@ -43,7 +48,6 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
-
     if (data.error) {
       alert(data.message);
     } else {
@@ -57,6 +61,24 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     }
     getData();
   };
+
+  const changePassword = async (email: string, password: string) => {
+    const response = await fetch("http://localhost:3000/api/login", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await response.json();
+    if (data.error) {
+      alert(data.message);
+    } else {
+      alert("amjilttai soligdloo");
+    }
+    getData();
+  };
+
   const signUp = async (email: string, password: string, username: string) => {
     const response = await fetch("http://localhost:3000/api/sign-up", {
       method: "POST",
@@ -104,7 +126,14 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <userContext.Provider
-      value={{ loginUser, users, logedUser, logoutHandler, signUp }}
+      value={{
+        loginUser,
+        users,
+        logedUser,
+        logoutHandler,
+        signUp,
+        changePassword,
+      }}
     >
       {children}
     </userContext.Provider>
