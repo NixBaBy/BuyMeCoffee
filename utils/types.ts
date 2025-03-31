@@ -3,9 +3,9 @@ export type userType = {
   email: string;
   password: string;
   username: string | null;
-  receivedDonations: receivedDonationsType[];
-  profile: profileType | null;
-  bankCard: BankCardType | null;
+  receivedDonations?: receivedDonationsType[];
+  profile?: profileType | null;
+  bankCard?: BankCardType | null;
   createdAt: Date;
   updatedAt: Date;
 };
