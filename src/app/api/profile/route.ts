@@ -1,16 +1,50 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
+
+export async function GET(req: Request): Promise<Response> {
+  try {
+    const query = `
+      SELECT 
+        u.id AS user_id, 
+        u.email, 
+        jsonb_build_object(
+          'id', p.id,
+          'name', p."name",
+          'about', p."about",
+          'avatarImage', p."avatarImage",
+          'socialMediaURL', p."socialMediaURL"
+        ) AS profile
+      FROM "user" u
+      LEFT JOIN "Profile" p ON u.id = p."user_id";
+    `;
+
+    const usersWithProfiles = await runQuery(query);
+
+    return new NextResponse(JSON.stringify(usersWithProfiles), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Failed to run query:", err);
+    return new NextResponse(JSON.stringify({ error: "server алдаа гарлаа!" }), {
+      status: 500,
+    });
+  }
+}
+
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { name, about, avatarImage, socialMediaURL } = await req.json();
+    const { name, about, avatarImage, socialMediaURL, user_id } =
+      await req.json();
 
-    const createProfilequery = `INSERT INTO "Profile" ("name", "about", "avatarImage", "socialMediaURL") VALUES ($1, $2, $3, $4) RETURNING *;`;
+    const createProfilequery = `INSERT INTO "Profile" ("name", "about", "avatarImage", "socialMediaURL" , "user_id") VALUES ($1, $2, $3, $4 , $5) RETURNING *;`;
 
     const newProfile = await runQuery(createProfilequery, [
       name,
       about,
       avatarImage,
       socialMediaURL,
+      user_id,
     ]);
     return new NextResponse(
       JSON.stringify({ message: "Amjilttai profile uuslee", newProfile }),

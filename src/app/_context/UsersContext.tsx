@@ -16,7 +16,7 @@ type userContextType = {
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
   changePassword: (email: string, password: string) => {};
-  loggedInUser: userType;
+  // loggedInUser: userType | null;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -37,7 +37,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     const data = await res.json();
-    setUsers(data.data); // data.data дотор хэрэглэгчийн жагсаалт байх ёстой
+    setUsers(data.data);
   };
 
   const loginUser = async (email: string, password: string) => {
@@ -54,6 +54,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.setItem("user", data.user.id);
       setLogedUser(data.user);
+      console.log(data.user);
       if (!data.user.profile) {
         router.push("/");
       } else {
@@ -124,9 +125,10 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setLogedUser(null);
   };
-  const userId: number | null = logedUser ? Number(logedUser) : null;
-  const loggedInUser =
-    userId !== null ? users.find((user) => user.id === userId) : null;
+
+  // const userId: number | null = logedUser ? Number(logedUser) : null;
+  // const foundUser = users.find((user) => user.id == userId);
+  // const loggedInUser = foundUser || null;
 
   return (
     <userContext.Provider
@@ -137,7 +139,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         logoutHandler,
         signUp,
         changePassword,
-        loggedInUser,
+        // loggedInUser,
       }}
     >
       {children}

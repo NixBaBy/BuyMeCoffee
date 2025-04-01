@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
 import { userType } from "../../../../utils/types";
+import bcrypt from "bcrypt";
 
 export async function GET(): Promise<Response> {
   try {
@@ -29,7 +30,7 @@ export async function GET(): Promise<Response> {
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { email, password } = await req.json();
+    const { email, password, profile } = await req.json();
 
     if (!email || !password) {
       return new NextResponse(
@@ -49,8 +50,10 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const user = users[0];
+    console.log(user);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (user.password !== password) {
+    if (!isPasswordValid) {
       return new NextResponse(JSON.stringify({ error: "Нууц үг буруу!" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
