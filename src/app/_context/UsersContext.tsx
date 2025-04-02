@@ -50,7 +50,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.message);
+      alert(data.error);
     } else {
       localStorage.setItem("user", data.user.id);
       setLogedUser(data.user);

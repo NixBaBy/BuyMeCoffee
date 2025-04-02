@@ -10,7 +10,7 @@ export type userType = {
   updatedAt: Date;
 };
 
-type receivedDonationsType = {
+export type receivedDonationsType = {
   id: number;
   amount: number;
   specialMessage: string;
@@ -18,20 +18,20 @@ type receivedDonationsType = {
   donorId: number;
 };
 
-type profileType = {
+export type profileType = {
   id: number;
   name: string;
   about: string;
   avatarImage: string;
   socialMediaURL: string;
-  backgroundImage: string;
-  successMessage: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
+  backgroundImage?: string;
+  successMessage?: string;
+  user_id: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-type BankCardType = {
+export type BankCardType = {
   id: number;
   country: string;
   firstName: string;

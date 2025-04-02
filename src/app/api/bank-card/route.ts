@@ -1,21 +1,58 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
+import { BankCardType } from "../../../../utils/types";
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { country, firstName, lastName, cardNumber, expiryDate } =
-      await req.json();
-
-    const createBankCard = `INSERT INTO "BankCard" ("country","firstName", "lastName", "cardNumber", "expiryDate") VALUES ($1, $2, $3, $4 , $5) RETURNING *;`;
-    const newBankCard = await runQuery(createBankCard, [
+    const {
       country,
       firstName,
       lastName,
       cardNumber,
       expiryDate,
+      cvc,
+      user_id,
+    } = await req.json();
+
+    const createBankCard = `INSERT INTO "BankCard" ("country","firstName", "lastName", "cardNumber", "expiryDate", "cvc","user_id") VALUES ($1, $2, $3, $4 , $5,$6,$7) RETURNING *;`;
+    const newBankCard: BankCardType[] = await runQuery(createBankCard, [
+      country,
+      firstName,
+      lastName,
+      cardNumber,
+      expiryDate,
+      cvc,
+      user_id,
     ]);
+
+    if (!newBankCard || newBankCard.length === 0) {
+      return new NextResponse(
+        JSON.stringify({ error: "BankCard үүсгэхэд алдаа гарлаа!" }),
+        { status: 500 }
+      );
+    }
+
+    if (!user_id || isNaN(user_id)) {
+      return new NextResponse(
+        JSON.stringify({
+          error: "user_id baihgui baina",
+        }),
+        { status: 400 }
+      );
+    }
+
+    const bankCardId = newBankCard[0].id;
+    const updateUserQuery = `
+    UPDATE "user" SET "BankCard" = $1 WHERE id = $2;
+  `;
+    await runQuery(updateUserQuery, [bankCardId, user_id]);
+
     return new NextResponse(
-      JSON.stringify({ messega: "amjilttai bankCard uuslee", newBankCard }),
+      JSON.stringify({
+        message: "amjilttai bankCard uuslee",
+        newBankCard,
+        bankCardId,
+      }),
       { status: 201 }
     );
   } catch (err) {

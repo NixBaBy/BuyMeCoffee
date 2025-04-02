@@ -28,8 +28,9 @@ import { useBankCard } from "@/app/_context/BankCardContext";
 const SecondStep = () => {
   const { createBankCard } = useBankCard();
   const { logedUser } = useUser();
+
   const userId = logedUser ? parseInt(logedUser, 10) : 0;
-  console.log(userId);
+
   const router = useRouter();
   const FormSchema = z.object({
     country: z.string().min(1, { message: "Country selection is required." }),
@@ -74,9 +75,10 @@ const SecondStep = () => {
       values.lastName,
       values.card,
       expiryDate,
-      userId,
-      values.cvc
+      values.cvc,
+      userId
     );
+    console.log(userId);
     router.push("/");
   }
 

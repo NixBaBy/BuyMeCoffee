@@ -31,18 +31,20 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        avatarImage,
-        name,
+        avatarImage: avatarImage,
+        name: name,
         about,
-        socialMediaURL,
-        userId,
+        socialMediaURL: socialMediaURL,
+        user_id: userId,
       }),
     });
-    if (!response.ok) {
-      console.error("Серверээс алдаа ирлээ:", response.status);
-      return;
-    }
+
     const data = await response.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      console.log("Profile үүссэн, ID:", data.profile_id);
+    }
   };
 
   const changeProfile = async (
