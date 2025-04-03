@@ -28,7 +28,10 @@ const page = ({
   const { createProfile } = useProfile();
   const { logedUser } = useUser();
 
-  const userId = logedUser ? parseInt(logedUser, 10) : 0;
+  if (!logedUser) {
+    return <p>Түр хүлээнэ үү...</p>;
+  }
+  const userId = logedUser?.id;
 
   const formSchema = z.object({
     username: z.string().min(2, {
@@ -51,7 +54,7 @@ const page = ({
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // createProfile("", values.username, values.about, values.mediaUrl, userId);
+    createProfile("", values.username, values.about, values.mediaUrl, userId);
     setCurrentStep(currentStep + 1);
   }
 

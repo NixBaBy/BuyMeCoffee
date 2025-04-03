@@ -26,8 +26,11 @@ import { useUser } from "@/app/_context/UsersContext";
 
 const PaymentChange = () => {
   const { changeBankCard } = useBankCard();
-  const { logedUser, loggedInUser } = useUser();
-  console.log(loggedInUser);
+  const { logedUser } = useUser();
+  if (!logedUser?.BankCard) {
+    <p>...loading</p>;
+  }
+
   const formSchema = z.object({
     country: z.string().min(1, { message: "Country selection is required." }),
 
@@ -54,28 +57,28 @@ const PaymentChange = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      country: loggedInUser.bankCard?.country || "",
-      firstName: loggedInUser.bankCard?.firstName || "",
-      lastName: loggedInUser.bankCard?.lastName || "",
-      card: loggedInUser.bankCard?.cardNumber || "",
+      country: logedUser?.BankCard?.country || "",
+      firstName: logedUser?.BankCard?.firstName || "",
+      lastName: logedUser?.BankCard?.lastName || "",
+      card: logedUser?.BankCard?.cardNumber || "",
       expires: "",
       year: "",
-      cvc: loggedInUser.bankCard?.cvc || "",
+      cvc: logedUser?.BankCard?.cvc || "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const expiryDate = `${values.year}-${values.expires.padStart(2, "0")}-01`;
-    const userId = Number(logedUser);
-    changeBankCard(
-      values.country,
-      values.firstName,
-      values.lastName,
-      values.card,
-      expiryDate,
-      userId,
-      values.cvc
-    );
+    if (logedUser?.BankCard)
+      changeBankCard(
+        values.country,
+        values.firstName,
+        values.lastName,
+        values.card,
+        expiryDate,
+        values.cvc,
+        logedUser?.BankCard?.id
+      );
   }
   return (
     <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">

@@ -52,12 +52,12 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     if (data.error) {
       alert(data.error);
     } else {
-      localStorage.setItem("user", data.user.id);
       setLogedUser(data.user);
-      if (!data.profile) {
-        router.push("/");
-      } else {
+      console.log(data.profile);
+      if (data.profile) {
         router.push("/createAccount");
+      } else {
+        router.push("/");
       }
     }
     getData();
@@ -104,12 +104,14 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       console.error("JSON-ийг унших үед алдаа гарсан:", error);
     }
   };
+
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem("user");
+      // const email = localStorage.getItem("email");
     } catch (error) {
       console.error("Error reading user from localStorage:", error);
     }
+    getData();
   }, [logedUser]);
 
   const logoutHandler = () => {
@@ -117,9 +119,6 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setLogedUser(null);
   };
-  // const foundUser =
-  //   users?.find((user) => user.id === Number(logedUser)) || null;
-
   return (
     <userContext.Provider
       value={{

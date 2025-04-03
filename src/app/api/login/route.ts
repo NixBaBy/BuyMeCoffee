@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
-import { profileType, userType } from "../../../../utils/types";
+import { BankCardType, profileType, userType } from "../../../../utils/types";
 import bcrypt from "bcrypt";
 
 export async function GET(): Promise<Response> {
@@ -9,7 +9,6 @@ export async function GET(): Promise<Response> {
 
     const users = await runQuery(getUserQuery);
 
-    console.log("USERS WITH PROFILE ", users);
     if (!users || users.length === 0) {
       return new NextResponse(JSON.stringify({ error: "User not found" }), {
         status: 404,
@@ -51,17 +50,25 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    const user = users[0];
-    let userWithProfile = user;
-    if (user.profile) {
-      const getProfileQuery = `SELECT * FROM "Profile" WHERE id =  $1`;
+    let userData = users[0];
+
+    if (userData.profile) {
+      const getProfileQuery = `SELECT * FROM "Profile" WHERE id = $1`;
       const profile: profileType[] = await runQuery(getProfileQuery, [
-        user.profile,
+        userData.profile,
       ]);
-      userWithProfile = { ...userWithProfile, profile: profile[0] };
+      userData = { ...userData, profile: profile[0] };
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (userData.BankCard) {
+      const getBankCardQuery = `SELECT * FROM "BankCard" WHERE id = $1`;
+      const BankCard: BankCardType[] = await runQuery(getBankCardQuery, [
+        userData.BankCard,
+      ]);
+      userData = { ...userData, BankCard: BankCard[0] };
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, userData.password);
 
     if (!isPasswordValid) {
       return new NextResponse(JSON.stringify({ error: "Нууц үг буруу!" }), {
@@ -69,10 +76,11 @@ export async function POST(req: Request): Promise<Response> {
         headers: { "Content-Type": "application/json" },
       });
     }
+
     return new NextResponse(
       JSON.stringify({
         message: "Амжилттай нэвтэрлээ!",
-        user: userWithProfile,
+        user: userData,
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );

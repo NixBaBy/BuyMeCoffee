@@ -1,3 +1,4 @@
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,12 +13,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+
 import { useUser } from "@/app/_context/UsersContext";
+import { useState } from "react";
+import { RefreshCcw } from "lucide-react";
 
 const SecondStep = ({ name }: { name: string }) => {
   const { signUp } = useUser();
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const formSchema = z.object({
     email: z.string().email(),
     password: z
@@ -42,11 +46,17 @@ const SecondStep = ({ name }: { name: string }) => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values.email, values.password, name);
+    setLoading(true);
     signUp(values.email, values.password, name);
+    setLoading(false);
   }
   return (
     <div className="flex flex-col gap-[24px]">
+      {loading && (
+        <div className="absolute flex justify-center items-center inset-0 bg-gray-500 bg-opacity-50">
+          <RefreshCcw className="animate-spin w-16 h-16 text-white" />
+        </div>
+      )}
       <div className="flex flex-col gap-2">
         <h3 className="text-[24px] font-bold tracking-[-0.6px]">
           Welcome,user

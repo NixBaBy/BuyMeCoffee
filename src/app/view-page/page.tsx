@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const ViewPage = () => {
-  const { loggedInUser } = useUser();
+  const { logedUser } = useUser();
 
-  if (!loggedInUser?.profile) {
+  if (!logedUser?.profile) {
     return <p>Loading...</p>;
   }
   return (
@@ -26,33 +26,29 @@ const ViewPage = () => {
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <div className="flex gap-3 w-full">
               <Image
-                src={loggedInUser?.profile.avatarImage || "/placeholder.jpg"}
+                src={logedUser?.profile.avatarImage || "/placeholder.jpg"}
                 width={48}
                 height={48}
                 alt=""
                 className="rounded-full"
               />
-              <p className="font-bold text-[20px]">
-                {loggedInUser?.profile.name}
-              </p>
+              <p className="font-bold text-[20px]">{logedUser?.profile.name}</p>
             </div>
             <div className="w-full bg-gray-200 h-[1px]"></div>
             <div className="flex flex-col gap-3">
-              <p className="font-bold">About {loggedInUser?.profile.name}</p>
-              <p>{loggedInUser?.profile.about}</p>
+              <p className="font-bold">About {logedUser?.profile.name}</p>
+              <p>{logedUser?.profile.about}</p>
             </div>
           </div>
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <p className="font-bold">Social media URL</p>
-            <p className="text-[14px]">
-              {loggedInUser?.profile.socialMediaURL}
-            </p>
+            <p className="text-[14px]">{logedUser?.profile.socialMediaURL}</p>
           </div>
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <p className="font-bold">Recent Supporters</p>
             <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
               <Heart />
-              <p>Be the first one to support {loggedInUser?.profile.name}</p>
+              <p>Be the first one to support {logedUser?.profile.name}</p>
             </div>
           </div>
         </div>

@@ -28,8 +28,11 @@ import { useBankCard } from "@/app/_context/BankCardContext";
 const SecondStep = () => {
   const { createBankCard } = useBankCard();
   const { logedUser } = useUser();
+  if (!logedUser) {
+    return <p>Түр хүлээнэ үү...</p>;
+  }
 
-  const userId = logedUser ? parseInt(logedUser, 10) : 0;
+  const userId = logedUser?.id;
 
   const router = useRouter();
   const FormSchema = z.object({

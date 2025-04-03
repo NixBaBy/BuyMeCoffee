@@ -58,11 +58,11 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, about, URL, id }),
+      body: JSON.stringify({ name, about, socialMediaURL: URL, id }),
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.message);
+      alert(data.error);
     } else {
       alert("amjilttai soligdloo");
     }

@@ -41,19 +41,20 @@ const page = () => {
       URL: "",
     },
   });
-  const { loggedInUser } = useUser();
-  const { changeProfile } = useProfile();
 
-  if (!loggedInUser) {
+  const { changeProfile } = useProfile();
+  const { logedUser } = useUser();
+
+  if (!logedUser?.profile) {
     return <p>Loading...</p>;
   }
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (loggedInUser.profile) {
+    if (logedUser?.profile) {
       changeProfile(
         values.name,
         values.about,
         values.URL,
-        loggedInUser.profile.id
+        logedUser.profile.id
       );
     } else {
       console.log("Profile is not available.");
@@ -64,10 +65,7 @@ const page = () => {
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-[650px]">
       <p className="text-[24px] font-bold">My account</p>
 
-      <div
-        className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full"
-        key={loggedInUser.id}
-      >
+      <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">
         <p className="font-bold">Personal info</p>
         <div className="flex flex-col gap-3">
           <p className="text-[14px] font-bold">Add photo</p>
@@ -75,8 +73,8 @@ const page = () => {
             className="w-[160px] h-[160px] rounded-full bg-center bg-cover"
             style={{
               backgroundImage: `url(${
-                loggedInUser.profile
-                  ? loggedInUser.profile.avatarImage
+                logedUser?.profile
+                  ? logedUser.profile.avatarImage
                   : "defaultImage.jpg"
               })`,
             }}

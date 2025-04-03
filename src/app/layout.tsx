@@ -5,6 +5,7 @@ import Header from "./_components/Header";
 import UsersProvider from "./_context/UsersContext";
 import ProfileProvider from "./_context/ProfileContext";
 import BankCardProvider from "./_context/BankCardContext";
+import DonationProvider from "./_context/DonationContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
         <UsersProvider>
-          <ProfileProvider>
-            <BankCardProvider>
-              <Header />
-              {children}
-            </BankCardProvider>
-          </ProfileProvider>
+          <DonationProvider>
+            <ProfileProvider>
+              <BankCardProvider>
+                <Header />
+                {children}
+              </BankCardProvider>
+            </ProfileProvider>
+          </DonationProvider>
         </UsersProvider>
       </body>
     </html>

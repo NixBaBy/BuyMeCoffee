@@ -3,19 +3,20 @@ export type userType = {
   email: string;
   password: string;
   username: string | null;
-  receivedDonations?: receivedDonationsType[];
+  donationType?: donationType[];
   profile?: profileType | null;
-  bankCard?: BankCardType | null;
+  BankCard?: BankCardType | null;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type receivedDonationsType = {
+export type donationType = {
   id: number;
   amount: number;
   specialMessage: string;
   socialMediaURLOrBuyMeCoffee: string;
   donorId: number;
+  recipientId: number;
 };
 
 export type profileType = {
