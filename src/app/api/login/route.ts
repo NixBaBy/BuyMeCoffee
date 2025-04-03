@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
-import { userType } from "../../../../utils/types";
+import { profileType, userType } from "../../../../utils/types";
 import bcrypt from "bcrypt";
 
 export async function GET(): Promise<Response> {
   try {
-    const getUserQuery = `SELECT * FROM "user";`;
+    const getUserQuery = `SELECT * FROM "public"."user" as u INNER JOIN "Profile" ON u.profile = "Profile".id;`;
 
     const users = await runQuery(getUserQuery);
+
+    console.log("USERS WITH PROFILE ", users);
     if (!users || users.length === 0) {
       return new NextResponse(JSON.stringify({ error: "User not found" }), {
         status: 404,
@@ -30,7 +32,7 @@ export async function GET(): Promise<Response> {
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { email, password, profile } = await req.json();
+    const { email, password } = await req.json();
 
     if (!email || !password) {
       return new NextResponse(
@@ -50,6 +52,14 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const user = users[0];
+    let userWithProfile = user;
+    if (user.profile) {
+      const getProfileQuery = `SELECT * FROM "Profile" WHERE id =  $1`;
+      const profile: profileType[] = await runQuery(getProfileQuery, [
+        user.profile,
+      ]);
+      userWithProfile = { ...userWithProfile, profile: profile[0] };
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -59,9 +69,11 @@ export async function POST(req: Request): Promise<Response> {
         headers: { "Content-Type": "application/json" },
       });
     }
-
     return new NextResponse(
-      JSON.stringify({ message: "Амжилттай нэвтэрлээ!", user }),
+      JSON.stringify({
+        message: "Амжилттай нэвтэрлээ!",
+        user: userWithProfile,
+      }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (err) {

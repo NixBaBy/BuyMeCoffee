@@ -35,12 +35,12 @@ const Page = () => {
         >
           <div className="flex justify-between items-center w-full">
             <div className="flex gap-3 items-center">
-              {user.profile?.avatarImage ? (
+              {user?.avatarImage ? (
                 <Image
                   width={40}
                   height={40}
-                  src={user.profile.avatarImage}
-                  alt={user.profile.name || "Unknown"}
+                  src={user?.avatarImage}
+                  alt="Unknown"
                   className="rounded-full"
                 />
               ) : (
@@ -53,7 +53,7 @@ const Page = () => {
                 />
               )}
               <p className="text-[20px] font-bold tracking-[-0.5px] object-cover">
-                {user.profile?.name || "Unknown"}
+                {user?.username || "Unknown"}
               </p>
             </div>
             <Link href={`/donation-screen/${user.id}`}>
@@ -65,18 +65,14 @@ const Page = () => {
           </div>
           <div className="flex gap-6">
             <div className="flex flex-col gap-[14px]">
-              <p className="font-bold">
-                About {user.profile?.name || "Unknown"}
-              </p>
+              <p className="font-bold">About {user?.name || "Unknown"}</p>
               <p className="text-[14px] w-[420px]">
-                {user.profile?.about || "No information available"}
+                {user?.about || "No information available"}
               </p>
             </div>
             <div className="flex flex-col gap-[14px]">
               <p className="font-bold">Social media URL</p>
-              <p className="text-[14px]">
-                {user.profile?.socialMediaURL || "N/A"}
-              </p>
+              <p className="text-[14px]">{user?.socialMediaURL || "N/A"}</p>
             </div>
           </div>
         </div>

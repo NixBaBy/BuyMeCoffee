@@ -37,7 +37,7 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
     cvc: string,
     userId: number
   ) => {
-    const response = await fetch("http://localhost:3000/api/bank-card", {
+    const response = await fetch("/api/bank-card", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
         cardNumber,
         expiryDate,
         cvc,
-        userId,
+        user_id: userId,
       }),
     });
     if (!response.ok) {

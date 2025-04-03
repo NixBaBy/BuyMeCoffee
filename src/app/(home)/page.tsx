@@ -19,9 +19,9 @@ const page = () => {
     setSelectedValue(value);
   };
 
-  const { loggedInUser } = useUser();
-
-  if (!loggedInUser?.profile) {
+  const { logedUser } = useUser();
+  console.log("logeduser", logedUser);
+  if (!logedUser?.profile) {
     return <p>Loading...</p>;
   }
   // const donationFound = users.filter(
@@ -34,13 +34,13 @@ const page = () => {
         <div className="flex justify-between items-center w-full ">
           <div className="flex gap-3 items-center">
             <img
-              src={loggedInUser.profile.avatarImage || "defaultImage.jpg"}
+              src={logedUser?.profile.avatarImage || "defaultImage.jpg"}
               alt=""
               className="w-[48px] h-[48px] rounded-[48px] "
             />
             <div className="flex flex-col gap-[4px]">
-              <p className="font-bold">{loggedInUser.profile.name}</p>
-              <p>{loggedInUser.profile.socialMediaURL}</p>
+              <p className="font-bold">{logedUser.profile.name}</p>
+              <p>{logedUser.profile.about}</p>
             </div>
           </div>
           <Button>

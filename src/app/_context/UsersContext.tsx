@@ -12,11 +12,10 @@ import { userType } from "../../../utils/types";
 type userContextType = {
   loginUser: (email: string, password: string) => void;
   users: userType[];
-  logedUser: string | null;
+  logedUser: userType | null;
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
   changePassword: (email: string, password: string) => {};
-  // loggedInUser: userType | null;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -26,7 +25,7 @@ export const useUser = () => {
 
 const UsersProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<userType[]>([]);
-  const [logedUser, setLogedUser] = useState<string | null>(null);
+  const [logedUser, setLogedUser] = useState<userType | null>(null);
 
   const router = useRouter();
 
@@ -37,7 +36,8 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     const data = await res.json();
-    setUsers(data.data);
+
+    setUsers(data.users);
   };
 
   const loginUser = async (email: string, password: string) => {
@@ -54,8 +54,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.setItem("user", data.user.id);
       setLogedUser(data.user);
-      console.log(data.user);
-      if (!data.user.profile) {
+      if (!data.profile) {
         router.push("/");
       } else {
         router.push("/createAccount");
@@ -108,13 +107,6 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        getData();
-        setLogedUser(storedUser);
-        return;
-      }
-
-      // router.push("/sign-up");
     } catch (error) {
       console.error("Error reading user from localStorage:", error);
     }
@@ -125,10 +117,8 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setLogedUser(null);
   };
-
-  // const userId: number | null = logedUser ? Number(logedUser) : null;
-  // const foundUser = users.find((user) => user.id == userId);
-  // const loggedInUser = foundUser || null;
+  // const foundUser =
+  //   users?.find((user) => user.id === Number(logedUser)) || null;
 
   return (
     <userContext.Provider
@@ -139,7 +129,6 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         logoutHandler,
         signUp,
         changePassword,
-        // loggedInUser,
       }}
     >
       {children}
