@@ -10,6 +10,7 @@ export async function runQuery<T>(
   try {
     await client.connect();
     const res = await client.query(query, params);
+    console.log(res);
     return res.rows;
   } catch (err) {
     console.error("Error executing query:", err);

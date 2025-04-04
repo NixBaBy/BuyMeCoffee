@@ -53,14 +53,14 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       alert(data.error);
     } else {
       setLogedUser(data.user);
-      console.log(data.profile);
-      if (data.profile) {
+
+      localStorage.setItem("loged_id", data.user.id);
+      if (!data.user.profile) {
         router.push("/createAccount");
       } else {
         router.push("/");
       }
     }
-    getData();
   };
 
   const changePassword = async (email: string, password: string) => {
@@ -77,7 +77,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     } else {
       alert("amjilttai soligdloo");
     }
-    getData();
+    // getData();
   };
 
   const signUp = async (email: string, password: string, username: string) => {
@@ -99,26 +99,40 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       } else {
         router.push("/login");
       }
-      getData();
+      // getData();
     } catch (error) {
       console.error("JSON-ийг унших үед алдаа гарсан:", error);
     }
   };
 
   useEffect(() => {
-    try {
-      // const email = localStorage.getItem("email");
-    } catch (error) {
-      console.error("Error reading user from localStorage:", error);
+    if (typeof window !== "undefined") {
+      const logedId = localStorage.getItem("loged_id");
+      if (logedId) {
+        const fetchLoggedUser = async () => {
+          const res = await fetch(`http://localhost:3000/api/login/${logedId}`);
+          if (!res.ok) {
+            console.error("Алдаа гарлаа:", res.status);
+            return;
+          }
+          const data = await res.json();
+          setLogedUser(data.user);
+        };
+        fetchLoggedUser();
+      }
     }
+  }, []);
+
+  useEffect(() => {
     getData();
-  }, [logedUser]);
+  }, []);
 
   const logoutHandler = () => {
     router.push("/login");
     localStorage.clear();
     setLogedUser(null);
   };
+
   return (
     <userContext.Provider
       value={{

@@ -29,11 +29,10 @@ export async function POST(req: Request): Promise<Response> {
       specialURLOrBuyMeCoffee,
       donorId,
       recipientId,
-      user_id,
     } = await req.json();
 
-    const createDonation = `INSERT INTO "Donation" ("amount", "specialMessage", "specialURLOrBuyMeCoffee", "donorId", "recipientId","user_id") 
-                              VALUES($1,$2,$3,$4,$5,$6) RETURNING *;`;
+    const createDonation = `INSERT INTO "Donation" ("amount", "specialMessage", "specialURLOrBuyMeCoffee", "donorId", "recipientId") 
+                              VALUES($1,$2,$3,$4,$5) RETURNING *;`;
 
     const newDonation: donationType[] = await runQuery(createDonation, [
       amount,
@@ -41,16 +40,26 @@ export async function POST(req: Request): Promise<Response> {
       specialURLOrBuyMeCoffee,
       donorId,
       recipientId,
-      user_id,
     ]);
 
     let DonationId = newDonation[0].id;
 
     const updateDonationQuery = `
-      UPDATE "user" SET Donation = $1 WHERE id = $2;
-      `;
-    await runQuery(updateDonationQuery, [DonationId, user_id]);
+  UPDATE "user"
+  SET donation = 
+    CASE
+      WHEN donation IS NULL THEN ARRAY[$1]::integer[]
+      ELSE array_append(donation, $1::integer)
+    END
+  WHERE profile = $2;
+`;
 
+    const result = await runQuery(updateDonationQuery, [
+      DonationId,
+      recipientId,
+    ]);
+
+    console.log({ result });
     return new NextResponse(
       JSON.stringify({
         message: "Амжилттай илгээлээ!",

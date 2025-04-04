@@ -57,7 +57,6 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     const data = await response.json();
-    console.log(data);
   };
 
   const changeBankCard = async (

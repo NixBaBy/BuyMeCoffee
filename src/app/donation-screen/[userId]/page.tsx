@@ -83,9 +83,8 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
         5,
         values.url,
         values.message,
-        userData.profile,
         logedUser.profile.id,
-        logedUser.id
+        userData.profile
       );
     } else {
       console.error("Profile information is missing.");

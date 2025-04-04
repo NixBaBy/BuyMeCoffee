@@ -10,6 +10,7 @@ type profileContextType = {
     userId: number
   ) => void;
   changeProfile: (name: string, about: string, URL: string, id: number) => void;
+  createSuccessMessage: (successMessage: string, id: number) => void;
 };
 const profileContext = createContext<profileContextType>(
   {} as profileContextType
@@ -67,8 +68,31 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       alert("amjilttai soligdloo");
     }
   };
+
+  const createSuccessMessage = async (successMessage: string, id: number) => {
+    const response = await fetch("http://localhost:3000/api/success-message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        successMessage,
+        id,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert("SuccessMessage үүссэн");
+    }
+  };
+
   return (
-    <profileContext.Provider value={{ createProfile, changeProfile }}>
+    <profileContext.Provider
+      value={{ createProfile, changeProfile, createSuccessMessage }}
+    >
       {children}
     </profileContext.Provider>
   );

@@ -20,7 +20,6 @@ const page = () => {
   };
 
   const { logedUser } = useUser();
-  console.log("logeduser", logedUser);
   if (!logedUser?.profile) {
     return <p>Loading...</p>;
   }

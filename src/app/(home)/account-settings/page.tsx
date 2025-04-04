@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useProfile } from "@/app/_context/ProfileContext";
+import SuccessMessage from "./components/SuccessMessage";
 
 const page = () => {
   const formSchema = z.object({
@@ -44,6 +45,7 @@ const page = () => {
 
   const { changeProfile } = useProfile();
   const { logedUser } = useUser();
+  const { createSuccessMessage } = useProfile();
 
   if (!logedUser?.profile) {
     return <p>Loading...</p>;
@@ -142,14 +144,7 @@ const page = () => {
       </div>
       <ChangePassword />
       <PaymentChange />
-      <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">
-        <p className="font-bold">Success page</p>
-        <div className="flex flex-col gap-2">
-          <p>Confirmation message</p>
-          <Input />
-        </div>
-        <Button className="w-full">Save changes</Button>
-      </div>
+      <SuccessMessage />
     </div>
   );
 };

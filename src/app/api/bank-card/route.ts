@@ -14,8 +14,6 @@ export async function POST(req: Request): Promise<Response> {
       user_id,
     } = await req.json();
 
-    console.log("user_id", user_id);
-
     const createBankCard = `INSERT INTO "BankCard" ("country","firstName", "lastName", "cardNumber", "expiryDate", "cvc","user_id") VALUES ($1, $2, $3, $4 , $5,$6,$7) RETURNING *;`;
     const newBankCard: BankCardType[] = await runQuery(createBankCard, [
       country,

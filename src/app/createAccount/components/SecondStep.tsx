@@ -81,7 +81,6 @@ const SecondStep = () => {
       values.cvc,
       userId
     );
-    console.log(userId);
     router.push("/");
   }
 

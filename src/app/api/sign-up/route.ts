@@ -30,7 +30,7 @@ export async function POST(req: Request): Promise<Response> {
       email,
       hashedPassword,
     ]);
-    console.log(newUser);
+
     return new NextResponse(
       JSON.stringify({
         message: "Амжилттай хэрэглэгч нэмэгдлээ!",

@@ -7,8 +7,7 @@ type donationContextType = {
     url: string,
     message: string,
     donorId: number,
-    recipientId: number,
-    user_id: number
+    recipientId: number
   ) => void;
 };
 const donationContext = createContext<donationContextType>(
@@ -23,8 +22,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     url: string,
     message: string,
     donorId: number,
-    recipientId: number,
-    user_id: number
+    recipientId: number
   ) => {
     const response = await fetch("http://localhost:3000/api/donation", {
       method: "POST",
@@ -37,7 +35,6 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
         specialMessage: message,
         donorId,
         recipientId,
-        user_id,
       }),
     });
 
