@@ -9,26 +9,29 @@ import { userType } from "../../../../utils/types";
 import Link from "next/link";
 
 const Page = () => {
-  const [searchValue, setSearchValue] = useState<userType[]>([]);
+  const [searchValue, setSearchValue] = useState<string>(""); // Хайлт хийх утга
   const { users } = useUser();
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const search = users.filter((user) =>
-      user.profile?.name?.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setSearchValue(search);
+    setSearchValue(e.target.value);
   };
+
+  const filteredUsers = searchValue
+    ? users.filter((user) =>
+        user.name?.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    : users;
 
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-full">
       <p>Explore creators</p>
       <Input
         placeholder="Search name"
-        className="w-[243px] px-3 "
+        className="w-[243px] px-3"
+        value={searchValue}
         onChange={inputHandler}
       />
-
-      {(searchValue.length === 0 ? users : searchValue).map((user) => (
+      {filteredUsers.map((user) => (
         <div
           className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]"
           key={user.id}

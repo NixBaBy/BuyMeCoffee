@@ -4,7 +4,13 @@ import { donationType } from "../../../../utils/types";
 
 export async function GET(): Promise<Response> {
   try {
-    const getUserQuery = `SELECT * FROM "Donation";`;
+    const getUserQuery = `
+    SELECT * 
+    FROM 
+      "Donation"
+    INNER JOIN 
+      "Profile" ON "Donation"."donorId" = "Profile"."id";
+  `;
 
     const donation = await runQuery(getUserQuery);
 
@@ -59,7 +65,6 @@ export async function POST(req: Request): Promise<Response> {
       recipientId,
     ]);
 
-    console.log({ result });
     return new NextResponse(
       JSON.stringify({
         message: "Амжилттай илгээлээ!",

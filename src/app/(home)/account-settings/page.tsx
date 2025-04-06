@@ -33,19 +33,17 @@ const page = () => {
       message: "Username must be at least 2 characters.",
     }),
   });
+  const { changeProfile } = useProfile();
+  const { logedUser } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      about: "",
-      URL: "",
+      name: logedUser?.profile?.name,
+      about: logedUser?.profile?.about,
+      URL: logedUser?.profile?.socialMediaURL,
     },
   });
-
-  const { changeProfile } = useProfile();
-  const { logedUser } = useUser();
-  const { createSuccessMessage } = useProfile();
 
   if (!logedUser?.profile) {
     return <p>Loading...</p>;

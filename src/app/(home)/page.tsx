@@ -11,9 +11,12 @@ import {
 } from "@/components/ui/select";
 import { useUser } from "../_context/UsersContext";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDonation } from "../_context/DonationContext";
 
 const page = () => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+  const { donations } = useDonation();
 
   const handleSelectChange = (value: string) => {
     setSelectedValue(value);
@@ -23,10 +26,10 @@ const page = () => {
   if (!logedUser?.profile) {
     return <p>Loading...</p>;
   }
-  // const donationFound = users.filter(
-  //   (user) => user.receivedDonations. === selectedValue
-  // );
 
+  const filteredDonations = donations.filter(
+    (donation) => donation.recipientId === logedUser?.profile?.id
+  );
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-full">
       <div className="p-6 flex flex-col items-start gap-3 rounded-lg border border-solid border-[#E4E4E7]">
@@ -87,69 +90,31 @@ const page = () => {
           </SelectContent>
         </Select>
       </div>
-      {/* <div className="p-6 flex flex-col items-start gap-4 rounded-lg border border-solid border-[#E4E4E7]">
-        {donationFound.length === 0
-          ? users.map((user) => {
-              return (
-                <div key={user.id} className="w-full flex flex-col gap-4">
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex gap-3 items-center">
-                      <img
-                        src={user.profile.avatarImage}
-                        alt=""
-                        className="w-[32px] h-[32px]  rounded-full"
-                      />
-                      <div className="flex flex-col gap-[4px]">
-                        <p className="font-bold">{user.profile.name}</p>
-                        <p className="text-[12px] text-[#09090B]">
-                          {user.profile.socialMediaURL}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="font-bold flex flex-col gap-[4px]">
-                        + ${user.receivedDonations.amount}
-                      </p>
-                      <p>10 hours ago</p>
-                    </div>
-                  </div>
-                  <p className="text-[14px] ">
-                    {user.receivedDonations.specialMessage}
-                  </p>
-                </div>
-              );
-            })
-          : donationFound.map((user) => {
-              return (
-                <div key={user.id} className="w-full flex flex-col gap-4">
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex gap-3 items-center">
-                      <img
-                        src={user.profile.image}
-                        alt=""
-                        className="w-[32px] h-[32px]  rounded-full"
-                      />
-                      <div className="flex flex-col gap-[4px]">
-                        <p className="font-bold">{user.username}</p>
-                        <p className="text-[12px] text-[#09090B]">
-                          {user.receivedDonations.socialMediaURLOrBuyMeCoffee}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="font-bold flex flex-col gap-[4px]">
-                        + ${user.receivedDonations.amount}
-                      </p>
-                      <p>10 hours ago</p>
-                    </div>
-                  </div>
-                  <p className="text-[14px] ">
-                    {user.receivedDonations.specialMessage}
-                  </p>
-                </div>
-              );
-            })}
-      </div> */}
+      {filteredDonations.map((donation, index) => (
+        <div key={index} className="flex flex-col gap-4">
+          <div className="flex gap-3 items-center">
+            <img
+              src={
+                donation.avatarImage ||
+                "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png"
+              }
+              alt=""
+              className="w-[40px] h-[40px] rounded-full object-cover"
+            />
+            <div className="flex justify-between w-full">
+              <div className="flex flex-col gap-1">
+                <p className="font-bold">{donation?.name}</p>
+                <p className="text-[12px]">{donation.socialMediaURL}</p>
+              </div>
+              <div className="flex flex-col gap-1">
+                <p className="font-bold">+ ${donation?.amount}</p>
+                <p>10 hours ago</p>
+              </div>
+            </div>
+          </div>
+          <p>{donation.specialMessage}</p>
+        </div>
+      ))}
     </div>
   );
 };

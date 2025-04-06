@@ -1,5 +1,12 @@
 "use client";
-import React, { createContext, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { donationType } from "../../../utils/types";
 
 type donationContextType = {
   sentDonation: (
@@ -9,6 +16,7 @@ type donationContextType = {
     donorId: number,
     recipientId: number
   ) => void;
+  donations: donationType[];
 };
 const donationContext = createContext<donationContextType>(
   {} as donationContextType
@@ -17,6 +25,18 @@ export const useDonation = () => {
   return useContext(donationContext);
 };
 const DonationProvider = ({ children }: { children: ReactNode }) => {
+  const [donations, setDonations] = useState<donationType[]>([]);
+
+  const getData = async () => {
+    const res = await fetch(`http://localhost:3000/api/donation`);
+    if (!res.ok) {
+      console.error("Алдаа гарлаа:", res.status);
+      return;
+    }
+    const data = await res.json();
+    setDonations(data.donation);
+  };
+
   const sentDonation = async (
     amount: number,
     url: string,
@@ -44,10 +64,14 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     } else {
       alert("Amjilttai donation ilgeelee");
     }
+    getData();
   };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
-    <donationContext.Provider value={{ sentDonation }}>
+    <donationContext.Provider value={{ sentDonation, donations }}>
       {children}
     </donationContext.Provider>
   );

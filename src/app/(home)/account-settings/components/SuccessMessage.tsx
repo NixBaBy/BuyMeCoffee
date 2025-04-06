@@ -53,7 +53,7 @@ const SuccessMessage = () => {
             name="successMessage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Success message</FormLabel>
                 <FormControl>
                   <Input {...field} className="w-full" />
                 </FormControl>

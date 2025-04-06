@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useProfile } from "@/app/_context/ProfileContext";
 import { useUser } from "@/app/_context/UsersContext";
+import AccountImage from "./AccountImage";
+import { handleUpload } from "@/lib/handle-upload";
 
 const page = ({
   setCurrentStep,
@@ -27,6 +29,9 @@ const page = ({
 }) => {
   const { createProfile } = useProfile();
   const { logedUser } = useUser();
+
+  const [file, setFile] = useState<File | null>(null);
+  const [image, setImage] = useState<string>("");
 
   if (!logedUser) {
     return <p>Түр хүлээнэ үү...</p>;
@@ -53,8 +58,24 @@ const page = ({
       mediaUrl: "",
     },
   });
+  useEffect(() => {
+    const imageUpload = async () => {
+      if (file) {
+        const imgUrl = await handleUpload(file);
+        setImage(imgUrl);
+      }
+    };
+    imageUpload();
+  }, [file]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createProfile("", values.username, values.about, values.mediaUrl, userId);
+    createProfile(
+      image,
+      values.username,
+      values.about,
+      values.mediaUrl,
+      userId
+    );
     setCurrentStep(currentStep + 1);
   }
 
@@ -64,12 +85,7 @@ const page = ({
         <p className="font-bold text-[24px] tracking-[-0.6px]">
           Complete your profile page
         </p>
-        <div className="flex flex-col gap-3">
-          <p>Add photo</p>
-          <div className="w-[160px] h-[160px] border-[1px] border-dashed border-[#E4E4E7] rounded-full flex justify-center items-center">
-            <img src="/camera.svg" alt="" />
-          </div>
-        </div>
+        <AccountImage setFile={setFile} setImage={setImage} image={image} />
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

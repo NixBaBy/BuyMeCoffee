@@ -25,12 +25,14 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const [unwrappedParams, setUnwrappedParams] = useState<{
     userId: string;
   } | null>(null);
-
   const { users } = useUser();
   const [userData, setUserData] = useState<any>(null);
   const searchParams = useSearchParams();
   const { sentDonation } = useDonation();
   const { logedUser } = useUser();
+  const { donations } = useDonation();
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const formSchema = z.object({
     amount: z.string().min(0, {
@@ -75,21 +77,31 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   if (!userData) {
     return <p>Loading user...</p>;
   }
-  const Fullscreen = window.innerWidth;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (logedUser?.profile?.id && userData?.profile) {
-      sentDonation(
-        5,
-        values.url,
-        values.message,
-        logedUser.profile.id,
-        userData.profile
-      );
+      setLoading(true);
+      try {
+        await sentDonation(
+          5,
+          values.url,
+          values.message,
+          logedUser.profile.id,
+          userData.profile
+        );
+      } catch (error) {
+        console.error("Error sending donation", error);
+      } finally {
+        setLoading(false);
+      }
     } else {
       console.error("Profile information is missing.");
     }
-  }
+  };
+
+  const filteredDonations = donations.filter(
+    (donation) => donation.recipientId === userData.id
+  );
 
   return (
     <div className="w-full pt-[60px]">
@@ -97,7 +109,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
         <Image
           src={userData?.backgroundImage || "/placeholder.jpg"}
           alt="zurag"
-          width={Fullscreen}
+          width={1010}
           height={319}
         />
       </div>
@@ -124,13 +136,38 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
             <p className="font-bold">Social media URL</p>
             <p className="text-[14px]">{userData?.socialMediaURL}</p>
           </div>
-          <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
-            <p className="font-bold">Recent Supporters</p>
-            <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
-              <Heart />
-              <p>Be the first one to support {userData?.name}</p>
+          {filteredDonations.length === 0 ? (
+            <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
+              <p className="font-bold">Recent Supporters</p>
+              <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
+                <Heart />
+                <p>Be the first one to support {userData?.name}</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
+              <p className="font-bold">Recent Supporters</p>
+              {filteredDonations.map((donation, index) => (
+                <div key={index} className="flex gap-3 items-center">
+                  <img
+                    src={
+                      donation.avatarImage ||
+                      "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png"
+                    }
+                    alt=""
+                    className="w-[40px] h-[40px] rounded-full object-cover"
+                  />
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-1">
+                      <p className="font-bold">{donation?.name}</p>
+                      <p>bought {donation.amount} coffee</p>
+                    </div>
+                    <p>{donation.specialMessage}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="p-6 gap-6 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
@@ -213,7 +250,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  Support
+                  {loading ? "Sending..." : "Support"}
                 </Button>
               </form>
             </Form>
