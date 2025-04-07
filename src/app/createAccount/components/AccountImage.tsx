@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -50,9 +49,11 @@ const AccountImage = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  function onSubmit() {}
+  const deleteHandler = () => {
+    setImage("");
+    setFile(null);
+  };
   return (
     <div>
       <Form {...form}>
@@ -64,21 +65,34 @@ const AccountImage = ({
               <FormItem>
                 <FormLabel>Add photo</FormLabel>
                 <FormControl>
-                  <div className="flex flex-col gap-2 w-[160px] h-[160px] rounded-full border border-dotted border-gray-300">
-                    <Input
-                      placeholder="image"
-                      type="file"
-                      onChange={handleFile}
-                      {...rest}
-                      className="w-[160px] h-[160px] rounded-full opacity-0"
-                    />
-
-                    {image && (
-                      <div>
+                  <div className="flex justify-center items-center gap-2 w-[160px] h-[160px] rounded-full border border-dotted border-gray-300 ">
+                    {image ? (
+                      <div className="flex justify-center items-center ">
                         <img
-                          className="w-[160px] h-[160px] object-cover mt-[-50px] rounded-full"
+                          className="w-[160px] h-[160px] object-cover  rounded-full absolute"
                           src={image}
                           alt="zurag"
+                        />
+                        <Button
+                          className="absolute bg-white text-red-500 rounded-full"
+                          onClick={deleteHandler}
+                        >
+                          X
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center items-center ">
+                        <Input
+                          placeholder="image"
+                          type="file"
+                          onChange={handleFile}
+                          {...rest}
+                          className="w-[160px] h-[160px] rounded-full opacity-0"
+                        />
+                        <img
+                          src="/camera.svg"
+                          alt=""
+                          className="w-[23px] h-[23px] absolute"
                         />
                       </div>
                     )}

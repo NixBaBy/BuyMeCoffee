@@ -9,10 +9,23 @@ import {
 import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 const Header = () => {
   const { logedUser, logoutHandler } = useUser();
+  const pathname = usePathname();
+  const { push } = useRouter();
 
+  const buttonText = pathname === "/sign-up" ? "Login" : "Sign Up";
+
+  const handleClick = () => {
+    if (pathname === "/sign-up") {
+      push("/login");
+      return;
+    }
+
+    push("/sign-up");
+  };
   return (
     <div className="flex justify-between items-center absolute top-1 w-full px-[80px]">
       <Link href="/">
@@ -41,11 +54,12 @@ const Header = () => {
           </Popover>
         </div>
       ) : (
-        <Link href="/login">
-          <Button className="bg-secondary text-secondary-foreground">
-            Login
-          </Button>
-        </Link>
+        <Button
+          onClick={handleClick}
+          className="bg-secondary text-secondary-foreground"
+        >
+          {buttonText}
+        </Button>
       )}
     </div>
   );

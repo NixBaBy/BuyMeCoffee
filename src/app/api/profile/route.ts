@@ -101,7 +101,7 @@ export async function PUT(req: Request): Promise<Response> {
       { status: 201 }
     );
   } catch (err) {
-    return new NextResponse(JSON.stringify({ error: "server aldaa garlaa" }), {
+    return new NextResponse(JSON.stringify({ err: "server aldaa garlaa" }), {
       status: 500,
     });
   }

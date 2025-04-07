@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { runQuery } from "../../../../utils/server/queryService";
-import { profileType } from "../../../../utils/types";
 
 export async function POST(req: Request): Promise<Response> {
   try {

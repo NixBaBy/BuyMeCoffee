@@ -29,14 +29,24 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
 
   const router = useRouter();
 
-  const getData = async () => {
-    const res = await fetch(`http://localhost:3000/api/login`);
+  const fetchLoggedUser = async (logedId: string) => {
+    const res = await fetch(`http://localhost:3000/api/login/${logedId}`);
     if (!res.ok) {
-      console.error("Алдаа гарлаа:", res.status);
+      console.log("Алдаа гарлаа:", res.status);
       return;
     }
     const data = await res.json();
+    setLogedUser(data.user);
+  };
 
+  const getData = async () => {
+    const res = await fetch(`http://localhost:3000/api/login`);
+    if (!res.ok) {
+      console.log("Алдаа гарлаа:", res.status);
+      return;
+    }
+    const data = await res.json();
+    console.log(data);
     setUsers(data.users);
   };
 
@@ -53,7 +63,8 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       alert(data.error);
     } else {
       setLogedUser(data.user);
-
+      const logedId = data.user.id;
+      fetchLoggedUser(logedId);
       localStorage.setItem("loged_id", data.user.id);
       if (!data.user.profile) {
         router.push("/createAccount");
@@ -109,16 +120,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     if (typeof window !== "undefined") {
       const logedId = localStorage.getItem("loged_id");
       if (logedId) {
-        const fetchLoggedUser = async () => {
-          const res = await fetch(`http://localhost:3000/api/login/${logedId}`);
-          if (!res.ok) {
-            console.error("Алдаа гарлаа:", res.status);
-            return;
-          }
-          const data = await res.json();
-          setLogedUser(data.user);
-        };
-        fetchLoggedUser();
+        fetchLoggedUser(logedId);
       }
     }
   }, []);

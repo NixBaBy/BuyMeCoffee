@@ -56,7 +56,6 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
       console.error("Серверээс алдаа ирлээ:", response.status);
       return;
     }
-    const data = await response.json();
   };
 
   const changeBankCard = async (

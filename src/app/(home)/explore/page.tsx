@@ -5,11 +5,10 @@ import { Input } from "@/components/ui/input";
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
-import { userType } from "../../../../utils/types";
 import Link from "next/link";
 
 const Page = () => {
-  const [searchValue, setSearchValue] = useState<string>(""); // Хайлт хийх утга
+  const [searchValue, setSearchValue] = useState<string>("");
   const { users } = useUser();
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +17,7 @@ const Page = () => {
 
   const filteredUsers = searchValue
     ? users.filter((user) =>
-        user.name?.toLowerCase().includes(searchValue.toLowerCase())
+        user.profile?.name?.toLowerCase().includes(searchValue.toLowerCase())
       )
     : users;
 
@@ -38,23 +37,14 @@ const Page = () => {
         >
           <div className="flex justify-between items-center w-full">
             <div className="flex gap-3 items-center">
-              {user?.avatarImage ? (
-                <Image
-                  width={40}
-                  height={40}
-                  src={user?.avatarImage}
-                  alt="Unknown"
-                  className="rounded-full"
-                />
-              ) : (
-                <Image
-                  width={40}
-                  height={40}
-                  src="/defaultImage.jpg"
-                  alt="Default Avatar"
-                  className="rounded-full"
-                />
-              )}
+              <Image
+                width={40}
+                height={40}
+                src={user?.profile?.avatarImage || "/defaultImage.jpg"}
+                alt="User Avatar"
+                className="rounded-full"
+              />
+
               <p className="text-[20px] font-bold tracking-[-0.5px] object-cover">
                 {user?.username || "Unknown"}
               </p>
@@ -68,14 +58,18 @@ const Page = () => {
           </div>
           <div className="flex gap-6">
             <div className="flex flex-col gap-[14px]">
-              <p className="font-bold">About {user?.name || "Unknown"}</p>
+              <p className="font-bold">
+                About {user?.profile?.name || "Unknown"}
+              </p>
               <p className="text-[14px] w-[420px]">
-                {user?.about || "No information available"}
+                {user?.profile?.about || "No information available"}
               </p>
             </div>
             <div className="flex flex-col gap-[14px]">
               <p className="font-bold">Social media URL</p>
-              <p className="text-[14px]">{user?.socialMediaURL || "N/A"}</p>
+              <p className="text-[14px]">
+                {user?.profile?.socialMediaURL || "N/A"}
+              </p>
             </div>
           </div>
         </div>

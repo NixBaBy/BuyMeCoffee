@@ -12,7 +12,7 @@ export type userType = {
 
 export type donationType = {
   id: number;
-  amount: number;
+  amount: string;
   specialMessage: string;
   socialMediaURLOrBuyMeCoffee: string;
   donorId: number;
@@ -44,3 +44,17 @@ export type BankCardType = {
   createdAt: string;
   updatedAt: string;
 };
+
+// export type donationINNERJOINType = {
+//   about: string;
+//   avatarImage: string;
+//   backgroundImage: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   id: number;
+//   amount: string;
+//   specialMessage: string;
+//   socialMediaURLOrBuyMeCoffee: string;
+//   donorId: number;
+//   recipientId: number;
+// };

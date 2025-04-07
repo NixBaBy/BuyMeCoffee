@@ -5,9 +5,12 @@ import bcrypt from "bcrypt";
 
 export async function GET(): Promise<Response> {
   try {
-    const getUserQuery = `SELECT * FROM "public"."user" as u INNER JOIN "Profile" ON u.profile = "Profile".id;`;
+    const getUserQuery = `
+      SELECT * FROM "public"."user" AS u
+      INNER JOIN "Profile" ON u.profile = "Profile".id;
+    `;
 
-    const users = await runQuery(getUserQuery);
+    const users: userType[] = await runQuery(getUserQuery);
 
     if (!users || users.length === 0) {
       return new NextResponse(JSON.stringify({ error: "User not found" }), {
@@ -16,7 +19,28 @@ export async function GET(): Promise<Response> {
       });
     }
 
-    return new NextResponse(JSON.stringify({ users }), {
+    const updatedUsers = await Promise.all(
+      users.map(async (user) => {
+        if (user.profile) {
+          const profileQuery = `SELECT * FROM "Profile" WHERE id = $1`;
+          const profile: profileType[] = await runQuery(profileQuery, [
+            user.profile,
+          ]);
+          user.profile = profile[0];
+        }
+
+        if (user.BankCard) {
+          const bankCardQuery = `SELECT * FROM "BankCard" WHERE id = $1`;
+          const bankCard: BankCardType[] = await runQuery(bankCardQuery, [
+            user.BankCard,
+          ]);
+          user.BankCard = bankCard[0];
+        }
+
+        return user;
+      })
+    );
+    return new NextResponse(JSON.stringify({ users: updatedUsers }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

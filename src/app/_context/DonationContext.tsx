@@ -10,7 +10,7 @@ import { donationType } from "../../../utils/types";
 
 type donationContextType = {
   sentDonation: (
-    amount: number,
+    amount: string,
     url: string,
     message: string,
     donorId: number,
@@ -38,7 +38,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const sentDonation = async (
-    amount: number,
+    amount: string,
     url: string,
     message: string,
     donorId: number,

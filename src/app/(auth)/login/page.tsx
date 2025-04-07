@@ -52,13 +52,7 @@ const page = () => {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center relative">
-      {loading && (
-        <div className="absolute flex justify-center items-center inset-0 bg-gray-500 bg-opacity-50">
-          <RefreshCcw className="animate-spin w-16 h-16 text-white" />
-        </div>
-      )}
-
+    <div className="w-full h-screen flex flex-col justify-center items-center ">
       <div className="w-[359px] flex flex-col gap-[24px]">
         <p className="text-[24px] font-bold">Welcome back</p>
         <Form {...form}>
@@ -101,9 +95,9 @@ const page = () => {
             <Button
               type="submit"
               className="w-full bg-[#18181B] text-white"
-              disabled={loading} // Loading байвал товчийг идэвхгүй болгох
+              disabled={loading}
             >
-              Continue
+              {loading ? "loading...." : "Continue"}
             </Button>
           </form>
         </Form>

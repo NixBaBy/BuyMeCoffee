@@ -3,7 +3,7 @@ import { useUser } from "@/app/_context/UsersContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Camera, Coffee, Fullscreen, Heart } from "lucide-react";
+import { Coffee, Heart } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -83,7 +83,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
       setLoading(true);
       try {
         await sentDonation(
-          5,
+          values.amount,
           values.url,
           values.message,
           logedUser.profile.id,
@@ -102,7 +102,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const filteredDonations = donations.filter(
     (donation) => donation.recipientId === userData.id
   );
-
+  console.log(donations);
   return (
     <div className="w-full pt-[60px]">
       <div className="w-full h-[319px] bg-gray-200 flex justify-center items-center">
@@ -190,6 +190,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
                         <ToggleGroup
                           {...field}
                           type="single"
+                          onValueChange={field.onChange}
                           value={field.value}
                         >
                           <ToggleGroupItem value="1" aria-label="Toggle $1">

@@ -20,7 +20,7 @@ import { useUser } from "@/app/_context/UsersContext";
 import AccountImage from "./AccountImage";
 import { handleUpload } from "@/lib/handle-upload";
 
-const page = ({
+const FirstStep = ({
   setCurrentStep,
   currentStep,
 }: {
@@ -153,4 +153,4 @@ const page = ({
   );
 };
 
-export default page;
+export default FirstStep;
