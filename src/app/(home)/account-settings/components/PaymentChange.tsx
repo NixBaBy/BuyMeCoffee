@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,6 +25,7 @@ import { useBankCard } from "@/app/_context/BankCardContext";
 import { useUser } from "@/app/_context/UsersContext";
 
 const PaymentChange = () => {
+  const [loading, setLoading] = useState(false);
   const { changeBankCard } = useBankCard();
   const { logedUser } = useUser();
   if (!logedUser?.BankCard) {
@@ -53,7 +54,7 @@ const PaymentChange = () => {
       message: "Username must be at least 2 characters.",
     }),
   });
-
+  console.log(logedUser);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,18 +68,26 @@ const PaymentChange = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const expiryDate = `${values.year}-${values.expires.padStart(2, "0")}-01`;
-    if (logedUser?.BankCard)
-      changeBankCard(
-        values.country,
-        values.firstName,
-        values.lastName,
-        values.card,
-        expiryDate,
-        values.cvc,
-        logedUser?.BankCard?.id
-      );
+    setLoading(true);
+    try {
+      if (logedUser?.BankCard) {
+        await changeBankCard(
+          values.country,
+          values.firstName,
+          values.lastName,
+          values.card,
+          expiryDate,
+          values.cvc,
+          logedUser.BankCard.id
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -233,8 +242,8 @@ const PaymentChange = () => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Submit
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "loading...." : " Submit"}
           </Button>
         </form>
       </Form>

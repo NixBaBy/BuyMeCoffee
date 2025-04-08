@@ -30,6 +30,7 @@ const ViewPage = () => {
   const { logedUser } = useUser();
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,17 +56,24 @@ const ViewPage = () => {
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const uploadedImsageUrl = await handleUpload(file);
-    const response = await fetch("http://localhost:3000/api/profile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        backgroundImage: uploadedImsageUrl,
-        user_id: logedUser?.id,
-      }),
-    });
+    try {
+      const response = await fetch("http://localhost:3000/api/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          backgroundImage: uploadedImsageUrl,
+          user_id: logedUser?.id,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const deleteHandler = () => {
@@ -136,7 +144,9 @@ const ViewPage = () => {
                 )}
               />
               <div className="absolute right-20 top-4 flex gap-1">
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "loading..." : "Save changes"}
+                </Button>
                 <Button className="bg-white text-black" onClick={deleteHandler}>
                   Cancel
                 </Button>

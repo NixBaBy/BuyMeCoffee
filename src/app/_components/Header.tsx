@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header = () => {
   const { logedUser, logoutHandler } = useUser();
@@ -39,13 +40,20 @@ const Header = () => {
       </Link>
       {logedUser ? (
         <div className="flex gap-2 py-2 px-4 items-center">
-          <Image
-            width={40}
-            height={40}
-            src={imageSrc}
-            alt="User Avatar"
-            className=" rounded-full"
-          />
+          {logedUser.profile?.avatarImage ? (
+            <Image
+              width={40}
+              height={40}
+              src={imageSrc}
+              alt="User Avatar"
+              className=" rounded-full"
+            />
+          ) : (
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          )}
           <p>{logedUser?.profile?.name}</p>
           <Popover>
             <PopoverTrigger>

@@ -6,6 +6,7 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Page = () => {
   const [searchValue, setSearchValue] = useState<string>("");
@@ -37,13 +38,20 @@ const Page = () => {
         >
           <div className="flex justify-between items-center w-full">
             <div className="flex gap-3 items-center">
-              <Image
-                width={40}
-                height={40}
-                src={user?.profile?.avatarImage || "/defaultImage.jpg"}
-                alt="User Avatar"
-                className="rounded-full"
-              />
+              {user.profile?.avatarImage ? (
+                <Image
+                  width={40}
+                  height={40}
+                  src={user?.profile?.avatarImage || "/defaultImage.jpg"}
+                  alt="User Avatar"
+                  className="rounded-full"
+                />
+              ) : (
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              )}
 
               <p className="text-[20px] font-bold tracking-[-0.5px] object-cover">
                 {user?.username || "Unknown"}

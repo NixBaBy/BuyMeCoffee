@@ -110,7 +110,6 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       } else {
         router.push("/login");
       }
-      // getData();
     } catch (error) {
       console.error("JSON-ийг унших үед алдаа гарсан:", error);
     }

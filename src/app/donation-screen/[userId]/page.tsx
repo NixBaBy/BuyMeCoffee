@@ -103,13 +103,13 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const filteredDonations = donations.filter(
     (donation) => donation.recipientId === userData.id
   );
-
+  console.log(userData);
   return (
     <div className="w-full pt-[60px]">
       <div className="w-full h-[319px] bg-gray-200 flex justify-center items-center">
         <Image
-          src={userData?.backgroundImage || "/placeholder.jpg"}
-          alt="zurag"
+          src={userData.profile?.backgroundImage || "/placeholder.jpg"}
+          alt="loading..."
           width={1010}
           height={319}
           className="w-full h-[319px] object-cover"

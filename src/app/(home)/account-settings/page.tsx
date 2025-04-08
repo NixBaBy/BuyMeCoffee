@@ -21,10 +21,12 @@ import {
 import { useProfile } from "@/app/_context/ProfileContext";
 import SuccessMessage from "./components/SuccessMessage";
 import { handleUpload } from "@/lib/handle-upload";
+import Image from "next/image";
 
 const page = () => {
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     name: z.string().min(2, {
@@ -79,17 +81,24 @@ const page = () => {
     imageUpload();
   }, [file]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (logedUser?.profile) {
-      changeProfile(
-        image,
-        values.name,
-        values.about,
-        values.URL,
-        logedUser.profile.id
-      );
-    } else {
-      console.log("Profile is not available.");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      if (logedUser?.profile) {
+        await changeProfile(
+          image,
+          values.name,
+          values.about,
+          values.URL,
+          logedUser.profile.id
+        );
+      } else {
+        console.log("Profile is not available.");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -97,7 +106,7 @@ const page = () => {
     setImage("");
     setFile(null);
   };
-
+  console.log(logedUser);
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-[650px]">
       <p className="text-[24px] font-bold">My account</p>
@@ -114,50 +123,102 @@ const page = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
-                <FormField
-                  control={form.control}
-                  name="img"
-                  render={({ field: { onChange, value, ...rest } }) => (
-                    <FormItem>
-                      <FormLabel>Add photo</FormLabel>
-                      <FormControl>
-                        <div className="flex justify-center items-center gap-2 w-[160px] h-[160px] rounded-full border border-dotted border-gray-300 ">
-                          {image ? (
-                            <div className="flex justify-center items-center ">
-                              <img
-                                className="w-[160px] h-[160px] object-cover  rounded-full absolute"
-                                src={image}
-                                alt="zurag"
-                              />
-                              <Button
-                                className="absolute bg-white text-red-500 rounded-full"
-                                onClick={deleteHandler}
-                              >
-                                X
-                              </Button>
+                {logedUser?.profile?.avatarImage ? (
+                  <div className="relative">
+                    <Image
+                      src={logedUser.profile.avatarImage}
+                      alt=""
+                      width={160}
+                      height={160}
+                      className="rounded-full"
+                    />
+                    <FormField
+                      control={form.control}
+                      name="img"
+                      render={({ field: { onChange, value, ...rest } }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="flex justify-center items-center gap-2 w-[160px] h-[160px] rounded-full  absolute top-0">
+                              {image ? (
+                                <div className="flex justify-center items-center ">
+                                  <Image
+                                    width={160}
+                                    height={160}
+                                    className="object-cover  rounded-full absolute"
+                                    src={image}
+                                    alt="zurag"
+                                  />
+                                  <Button
+                                    className="absolute bg-white text-red-500 rounded-full"
+                                    onClick={deleteHandler}
+                                  >
+                                    X
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div className="flex justify-center items-center ">
+                                  <Input
+                                    placeholder="image"
+                                    type="file"
+                                    onChange={handleFile}
+                                    {...rest}
+                                    className="w-[160px] h-[160px] rounded-full opacity-0"
+                                  />
+                                </div>
+                              )}
                             </div>
-                          ) : (
-                            <div className="flex justify-center items-center ">
-                              <Input
-                                placeholder="image"
-                                type="file"
-                                onChange={handleFile}
-                                {...rest}
-                                className="w-[160px] h-[160px] rounded-full opacity-0"
-                              />
-                              <img
-                                src="/camera.svg"
-                                alt=""
-                                className="w-[23px] h-[23px] absolute"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ) : (
+                  <FormField
+                    control={form.control}
+                    name="img"
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <FormItem>
+                        <FormLabel>Add photo</FormLabel>
+                        <FormControl>
+                          <div className="flex justify-center items-center gap-2 w-[160px] h-[160px] rounded-full border border-dotted border-gray-300 ">
+                            {image ? (
+                              <div className="flex justify-center items-center ">
+                                <img
+                                  className="w-[160px] h-[160px] object-cover  rounded-full absolute"
+                                  src={image}
+                                  alt="zurag"
+                                />
+                                <Button
+                                  className="absolute bg-white text-red-500 rounded-full"
+                                  onClick={deleteHandler}
+                                >
+                                  X
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="flex justify-center items-center ">
+                                <Input
+                                  placeholder="image"
+                                  type="file"
+                                  onChange={handleFile}
+                                  {...rest}
+                                  className="w-[160px] h-[160px] rounded-full opacity-0"
+                                />
+                                <img
+                                  src="/camera.svg"
+                                  alt=""
+                                  className="w-[23px] h-[23px] absolute"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <FormField
                   control={form.control}
@@ -198,8 +259,8 @@ const page = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Save changes
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "loading" : "Save changes"}
                 </Button>
               </form>
             </Form>

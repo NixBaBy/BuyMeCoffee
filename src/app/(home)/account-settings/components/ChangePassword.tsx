@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/app/_context/UsersContext";
 
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(false);
   const { changePassword } = useUser();
   const email = localStorage.getItem("email");
   const formSchema = z
@@ -42,11 +43,13 @@ const ChangePassword = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     if (!email) {
       console.error("Email олдсонгүй! Нэвтрэх шаардлагатай.");
     } else {
       changePassword(email, values.password);
     }
+    setLoading(false);
   }
   return (
     <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">
@@ -82,8 +85,8 @@ const ChangePassword = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Submit
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "loading..." : "Submit"}
           </Button>
         </form>
       </Form>
