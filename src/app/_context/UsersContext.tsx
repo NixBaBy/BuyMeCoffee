@@ -46,7 +46,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     const data = await res.json();
-    console.log(data);
+
     setUsers(data.users);
   };
 

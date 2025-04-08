@@ -20,8 +20,29 @@ import { profileType } from "../../../../utils/types";
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    const { name, about, avatarImage, socialMediaURL, user_id } =
-      await req.json();
+    const {
+      name,
+      about,
+      avatarImage,
+      socialMediaURL,
+      user_id,
+      backgroundImage,
+    } = await req.json();
+
+    if (backgroundImage) {
+      const createProfileBackgroundImage = `UPDATE "Profile" SET "backgroundImage" = $1 WHERE "Profile".user_id = $2;`;
+      const newProfileBackgroundImage = await runQuery(
+        createProfileBackgroundImage,
+        [backgroundImage, user_id]
+      );
+      return new NextResponse(
+        JSON.stringify({
+          message: "amjilttai profile background image uuslee",
+          newProfileBackgroundImage,
+        }),
+        { status: 201 }
+      );
+    }
 
     if (!user_id) {
       return new NextResponse(
@@ -31,7 +52,7 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const createProfileQuery = `
-      INSERT INTO "Profile" ("name", "about", "avatarImage", "socialMediaURL", "user_id") 
+      INSERT INTO "Profile" ("name", "about", "avatarImage", "socialMediaURL", "user_id")
       VALUES ($1, $2, $3, $4, $5) RETURNING *;
     `;
 

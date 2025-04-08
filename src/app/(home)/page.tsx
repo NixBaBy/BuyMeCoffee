@@ -12,6 +12,7 @@ import {
 import { useUser } from "../_context/UsersContext";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDonation } from "../_context/DonationContext";
+import { donationINNERJOINType } from "../../../utils/types";
 
 const page = () => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
@@ -90,7 +91,7 @@ const page = () => {
           </SelectContent>
         </Select>
       </div>
-      {filteredDonations.map((donation, index) => (
+      {filteredDonations.map((donation: donationINNERJOINType, index) => (
         <div key={index} className="flex flex-col gap-4">
           <div className="flex gap-3 items-center">
             <img

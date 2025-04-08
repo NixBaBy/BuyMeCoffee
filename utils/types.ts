@@ -45,16 +45,18 @@ export type BankCardType = {
   updatedAt: string;
 };
 
-// export type donationINNERJOINType = {
-//   about: string;
-//   avatarImage: string;
-//   backgroundImage: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   id: number;
-//   amount: string;
-//   specialMessage: string;
-//   socialMediaURLOrBuyMeCoffee: string;
-//   donorId: number;
-//   recipientId: number;
-// };
+export type donationINNERJOINType = {
+  about?: string;
+  amount?: string;
+  avatarImage?: string;
+  backgroundImage?: string;
+  createdAt?: Date;
+  donorId?: number;
+  id?: number;
+  name?: string;
+  recipientId?: number;
+  specialMessage?: string;
+  socialMediaURL?: string;
+  updatedAt?: Date;
+  user_id?: number;
+};

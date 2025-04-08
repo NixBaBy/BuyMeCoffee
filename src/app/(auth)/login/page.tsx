@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/app/_context/UsersContext";
-import { RefreshCcw } from "lucide-react";
 
 const page = () => {
   const { loginUser } = useUser();

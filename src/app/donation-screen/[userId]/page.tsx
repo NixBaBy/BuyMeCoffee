@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useDonation } from "@/app/_context/DonationContext";
+import { donationINNERJOINType } from "../../../../utils/types";
 
 const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const [unwrappedParams, setUnwrappedParams] = useState<{
@@ -87,7 +88,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
           values.url,
           values.message,
           logedUser.profile.id,
-          userData.profile
+          userData.profile.id
         );
       } catch (error) {
         console.error("Error sending donation", error);
@@ -102,7 +103,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const filteredDonations = donations.filter(
     (donation) => donation.recipientId === userData.id
   );
-  console.log(donations);
+
   return (
     <div className="w-full pt-[60px]">
       <div className="w-full h-[319px] bg-gray-200 flex justify-center items-center">
@@ -111,6 +112,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
           alt="zurag"
           width={1010}
           height={319}
+          className="w-full h-[319px] object-cover"
         />
       </div>
       <div className="w-screen px-[80px] flex justify-center gap-[40px] mt-[-86px]">
@@ -147,25 +149,27 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
           ) : (
             <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
               <p className="font-bold">Recent Supporters</p>
-              {filteredDonations.map((donation, index) => (
-                <div key={index} className="flex gap-3 items-center">
-                  <img
-                    src={
-                      donation.avatarImage ||
-                      "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png"
-                    }
-                    alt=""
-                    className="w-[40px] h-[40px] rounded-full object-cover"
-                  />
-                  <div className="flex flex-col gap-2">
-                    <div className="flex gap-1">
-                      <p className="font-bold">{donation?.name}</p>
-                      <p>bought {donation.amount} coffee</p>
+              {filteredDonations.map(
+                (donation: donationINNERJOINType, index) => (
+                  <div key={index} className="flex gap-3 items-center">
+                    <img
+                      src={
+                        donation.avatarImage ||
+                        "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png"
+                      }
+                      alt=""
+                      className="w-[40px] h-[40px] rounded-full object-cover"
+                    />
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
+                        <p className="font-bold">{donation?.name}</p>
+                        <p>bought {donation.amount} coffee</p>
+                      </div>
+                      <p>{donation.specialMessage}</p>
                     </div>
-                    <p>{donation.specialMessage}</p>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           )}
         </div>

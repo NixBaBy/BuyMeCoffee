@@ -59,6 +59,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const data = await response.json();
+
     if (data.error) {
       alert(data.error);
     } else {

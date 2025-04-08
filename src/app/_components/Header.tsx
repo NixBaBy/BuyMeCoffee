@@ -26,6 +26,9 @@ const Header = () => {
 
     push("/sign-up");
   };
+  const imageSrc = logedUser?.profile?.avatarImage?.startsWith("http")
+    ? logedUser.profile.avatarImage
+    : "/defaultImage.jpg";
   return (
     <div className="flex justify-between items-center absolute top-1 w-full px-[80px]">
       <Link href="/">
@@ -39,7 +42,7 @@ const Header = () => {
           <Image
             width={40}
             height={40}
-            src={logedUser?.profile?.avatarImage || "/defaultImage.jpg"}
+            src={imageSrc}
             alt="User Avatar"
             className=" rounded-full"
           />

@@ -9,7 +9,13 @@ type profileContextType = {
     socialMediaURL: string,
     userId: number
   ) => void;
-  changeProfile: (name: string, about: string, URL: string, id: number) => void;
+  changeProfile: (
+    avatarImage: string,
+    name: string,
+    about: string,
+    URL: string,
+    id: number
+  ) => void;
   createSuccessMessage: (successMessage: string, id: number) => void;
 };
 const profileContext = createContext<profileContextType>(
@@ -49,6 +55,7 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const changeProfile = async (
+    avatarImage: string,
     name: string,
     about: string,
     URL: string,
@@ -59,7 +66,13 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, about, socialMediaURL: URL, id }),
+      body: JSON.stringify({
+        avatarImage,
+        name,
+        about,
+        socialMediaURL: URL,
+        id,
+      }),
     });
     const data = await response.json();
     if (data.error) {

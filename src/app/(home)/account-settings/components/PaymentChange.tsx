@@ -80,6 +80,7 @@ const PaymentChange = () => {
         logedUser?.BankCard?.id
       );
   }
+
   return (
     <div className="p-6 flex flex-col items-start gap-6 rounded-lg border border-solid border-[#E4E4E7] w-full">
       <p className="font-bold">Payment details</p>

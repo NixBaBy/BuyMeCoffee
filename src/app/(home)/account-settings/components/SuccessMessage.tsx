@@ -15,6 +15,8 @@ import { useProfile } from "@/app/_context/ProfileContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/app/_context/UsersContext";
+import { Textarea } from "@/components/ui/textarea";
+
 const SuccessMessage = () => {
   const { createSuccessMessage } = useProfile();
 
@@ -55,7 +57,7 @@ const SuccessMessage = () => {
               <FormItem>
                 <FormLabel>Success message</FormLabel>
                 <FormControl>
-                  <Input {...field} className="w-full" />
+                  <Textarea {...field} className="w-full" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
