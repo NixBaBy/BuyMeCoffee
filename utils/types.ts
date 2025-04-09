@@ -59,4 +59,5 @@ export type donationINNERJOINType = {
   socialMediaURL?: string;
   updatedAt?: Date;
   user_id?: number;
+  successMessage?: string;
 };

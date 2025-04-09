@@ -46,7 +46,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     donorId: number,
     recipientId: number
   ) => {
-    const response = await fetch("/api/donation", {
+    const response = await fetch(`/api/donation`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
       toast.error(data.error);
     } else {
       toast.success("Amjilttai donation ilgeelee");
-      router.push("/successMessage");
+      router.push(`/successMessage/${recipientId}`);
     }
     getData();
   };
