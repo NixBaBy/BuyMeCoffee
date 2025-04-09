@@ -41,14 +41,18 @@ const Header = () => {
       {logedUser ? (
         <div className="flex gap-2 py-2 px-4 items-center">
           {logedUser.profile?.avatarImage ? (
-            <Image
-              width={40}
-              height={40}
-              src={imageSrc}
-              alt="User Avatar"
-              className=" rounded-full"
-            />
+            <Avatar>
+              <AvatarImage src={imageSrc} alt="@Profile" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
           ) : (
+            // <Image
+            //   width={40}
+            //   height={40}
+            //   src={}
+            //   alt="User Avatar"
+            //   className=" rounded-full"
+            // />
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>

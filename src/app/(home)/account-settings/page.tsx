@@ -70,19 +70,28 @@ const page = () => {
       form.setValue("img", "uploaded");
     }
   };
+  const imageUpload = async () => {
+    if (file) {
+      const imgUrl = await handleUpload(file);
+      return imgUrl;
+      // console.log("uploadImage", imgUrl);
+      // setImage(imgUrl);
+    }
+  };
 
   useEffect(() => {
-    const imageUpload = async () => {
-      if (file) {
-        const imgUrl = await handleUpload(file);
-        setImage(imgUrl);
-      }
-    };
-    imageUpload();
-  }, [file]);
+    if (logedUser.profile?.avatarImage) {
+      setImage(logedUser.profile?.avatarImage);
+    }
+  }, [logedUser]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
+    const image = await imageUpload();
+    if (!image) {
+      return;
+    }
+    console.log("onsubmit", image);
     try {
       if (logedUser?.profile) {
         await changeProfile(
@@ -106,7 +115,7 @@ const page = () => {
     setImage("");
     setFile(null);
   };
-  console.log(logedUser);
+
   return (
     <div className="mt-[124px] flex flex-col px-[24px] gap-6 rounded-lg bg-[#FFF] w-[650px]">
       <p className="text-[24px] font-bold">My account</p>
@@ -123,55 +132,23 @@ const page = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
-                {logedUser?.profile?.avatarImage ? (
-                  <div className="relative">
+                {image ? (
+                  <div className="relative  flex justify-center items-center w-[160px] h-[160px]">
                     <Image
-                      src={logedUser.profile.avatarImage}
+                      src={image}
                       alt=""
                       width={160}
                       height={160}
-                      className="rounded-full"
+                      className="rounded-full object-cover"
                     />
-                    <FormField
-                      control={form.control}
-                      name="img"
-                      render={({ field: { onChange, value, ...rest } }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="flex justify-center items-center gap-2 w-[160px] h-[160px] rounded-full  absolute top-0">
-                              {image ? (
-                                <div className="flex justify-center items-center ">
-                                  <Image
-                                    width={160}
-                                    height={160}
-                                    className="object-cover  rounded-full absolute"
-                                    src={image}
-                                    alt="zurag"
-                                  />
-                                  <Button
-                                    className="absolute bg-white text-red-500 rounded-full"
-                                    onClick={deleteHandler}
-                                  >
-                                    X
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="flex justify-center items-center ">
-                                  <Input
-                                    placeholder="image"
-                                    type="file"
-                                    onChange={handleFile}
-                                    {...rest}
-                                    className="w-[160px] h-[160px] rounded-full opacity-0"
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+
+                    <Button
+                      type="button"
+                      className="absolute bg-white text-red-500 rounded-full"
+                      onClick={deleteHandler}
+                    >
+                      X
+                    </Button>
                   </div>
                 ) : (
                   <FormField

@@ -1,5 +1,7 @@
 "use client";
 import React, { createContext, ReactNode, useContext } from "react";
+import { toast, Toaster } from "sonner";
+import { useUser } from "./UsersContext";
 
 type profileContextType = {
   createProfile: (
@@ -25,6 +27,7 @@ export const useProfile = () => {
   return useContext(profileContext);
 };
 const ProfileProvider = ({ children }: { children: ReactNode }) => {
+  const { getData } = useUser();
   const createProfile = async (
     avatarImage: string,
     name: string,
@@ -48,7 +51,7 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
     const data = await response.json();
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
       console.log("Profile үүссэн, ID:", data.profile_id);
     }
@@ -76,10 +79,11 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
-      alert("amjilttai soligdloo");
+      toast.success("amjilttai soligdloo");
     }
+    getData();
   };
 
   const createSuccessMessage = async (successMessage: string, id: number) => {
@@ -96,9 +100,9 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
     const data = await response.json();
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
-      alert("SuccessMessage үүссэн");
+      toast.success("SuccessMessage үүссэн");
     }
   };
 
@@ -106,6 +110,7 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
     <profileContext.Provider
       value={{ createProfile, changeProfile, createSuccessMessage }}
     >
+      <Toaster position="top-center" richColors />
       {children}
     </profileContext.Provider>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, {
   createContext,
   ReactNode,
@@ -8,6 +8,8 @@ import React, {
   useState,
 } from "react";
 import { userType } from "../../../utils/types";
+import { toast, Toaster } from "sonner";
+import Loading from "../_components/Loading";
 
 type userContextType = {
   loginUser: (email: string, password: string) => void;
@@ -16,6 +18,7 @@ type userContextType = {
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
   changePassword: (email: string, password: string) => {};
+  getData: () => void;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
@@ -26,6 +29,9 @@ export const useUser = () => {
 const UsersProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<userType[]>([]);
   const [logedUser, setLogedUser] = useState<userType | null>(null);
+  const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
+  const navigateToPath = (path: string) => router.push(path);
 
   const router = useRouter();
 
@@ -40,14 +46,15 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getData = async () => {
+    setLoading(false);
     const res = await fetch(`http://localhost:3000/api/login`);
     if (!res.ok) {
       console.log("Алдаа гарлаа:", res.status);
       return;
     }
     const data = await res.json();
-
     setUsers(data.users);
+    setLoading(true);
   };
 
   const loginUser = async (email: string, password: string) => {
@@ -60,7 +67,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
       setLogedUser(data.user);
       const logedId = data.user.id;
@@ -72,6 +79,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         router.push("/");
       }
     }
+    getData();
   };
 
   const changePassword = async (email: string, password: string) => {
@@ -84,11 +92,11 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.message);
+      toast.error(data.message);
     } else {
-      alert("amjilttai soligdloo");
+      toast.success("amjilttai soligdloo");
     }
-    // getData();
+    getData();
   };
 
   const signUp = async (email: string, password: string, username: string) => {
@@ -106,13 +114,14 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await response.json();
       if (data.error) {
-        alert(data.message);
+        toast.error(data.message);
       } else {
         router.push("/login");
       }
     } catch (error) {
       console.error("JSON-ийг унших үед алдаа гарсан:", error);
     }
+    getData();
   };
 
   useEffect(() => {
@@ -127,6 +136,23 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    const AUTH_PATHS = ["/login", "/sign-up"];
+
+    if (AUTH_PATHS.includes(pathname)) return;
+
+    if (!loading) return;
+
+    if (!logedUser) navigateToPath("/login");
+  }, [pathname, logedUser, loading]);
+
+  if (!loading)
+    return (
+      <div className="flex items-center justify-center w-screen h-screen">
+        <Loading />
+      </div>
+    );
 
   const logoutHandler = () => {
     router.push("/login");
@@ -143,8 +169,10 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
         logoutHandler,
         signUp,
         changePassword,
+        getData,
       }}
     >
+      <Toaster position="top-center" richColors />
       {children}
     </userContext.Provider>
   );

@@ -7,6 +7,8 @@ import React, {
   useState,
 } from "react";
 import { donationType } from "../../../utils/types";
+import { toast, Toaster } from "sonner";
+import { useRouter } from "next/navigation";
 
 type donationContextType = {
   sentDonation: (
@@ -26,9 +28,9 @@ export const useDonation = () => {
 };
 const DonationProvider = ({ children }: { children: ReactNode }) => {
   const [donations, setDonations] = useState<donationType[]>([]);
-
+  const router = useRouter();
   const getData = async () => {
-    const res = await fetch(`http://localhost:3000/api/donation`);
+    const res = await fetch(`/api/donation`);
     if (!res.ok) {
       console.error("Алдаа гарлаа:", res.status);
       return;
@@ -44,13 +46,13 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     donorId: number,
     recipientId: number
   ) => {
-    const response = await fetch("http://localhost:3000/api/donation", {
+    const response = await fetch("/api/donation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount,
+        amount: Number(amount),
         specialURLOrBuyMeCoffee: url,
         specialMessage: message,
         donorId,
@@ -61,9 +63,10 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
     const data = await response.json();
 
     if (data.error) {
-      alert(data.error);
+      toast.error(data.error);
     } else {
-      alert("Amjilttai donation ilgeelee");
+      toast.success("Amjilttai donation ilgeelee");
+      router.push("/successMessage");
     }
     getData();
   };
@@ -73,6 +76,7 @@ const DonationProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <donationContext.Provider value={{ sentDonation, donations }}>
+      <Toaster position="top-center" richColors />
       {children}
     </donationContext.Provider>
   );

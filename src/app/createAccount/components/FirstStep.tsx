@@ -33,11 +33,6 @@ const FirstStep = ({
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string>("");
 
-  if (!logedUser) {
-    return <p>Түр хүлээнэ үү...</p>;
-  }
-  const userId = logedUser?.id;
-
   const formSchema = z.object({
     username: z.string().min(2, {
       message: "Username must be at least 2 characters.",
@@ -78,7 +73,10 @@ const FirstStep = ({
     );
     setCurrentStep(currentStep + 1);
   }
-
+  if (!logedUser) {
+    return <p>Түр хүлээнэ үү...</p>;
+  }
+  const userId = logedUser?.id;
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen">
       <div className="flex flex-col gap-6 w-[510px] ">

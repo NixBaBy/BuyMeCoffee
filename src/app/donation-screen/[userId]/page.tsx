@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Coffee, Heart } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,13 +26,13 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const [unwrappedParams, setUnwrappedParams] = useState<{
     userId: string;
   } | null>(null);
+
   const { users } = useUser();
   const [userData, setUserData] = useState<any>(null);
   const searchParams = useSearchParams();
   const { sentDonation } = useDonation();
   const { logedUser } = useUser();
   const { donations } = useDonation();
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const formSchema = z.object({
@@ -75,10 +75,6 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
     }
   }, [users, userIdFromParams]);
 
-  if (!userData) {
-    return <p>Loading user...</p>;
-  }
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (logedUser?.profile?.id && userData?.profile) {
       setLoading(true);
@@ -101,14 +97,14 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   };
 
   const filteredDonations = donations.filter(
-    (donation) => donation.recipientId === userData.id
+    (donation) => donation.recipientId === userData?.id
   );
-  console.log(userData);
+
   return (
     <div className="w-full pt-[60px]">
       <div className="w-full h-[319px] bg-gray-200 flex justify-center items-center">
         <Image
-          src={userData.profile?.backgroundImage || "/placeholder.jpg"}
+          src={userData?.profile?.backgroundImage || "/placeholder.jpg"}
           alt="loading..."
           width={1010}
           height={319}

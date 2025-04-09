@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, ReactNode, useContext } from "react";
+import { toast, Toaster } from "sonner";
 
 type bankCardContextType = {
   createBankCard: (
@@ -84,14 +85,15 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
     });
     const data = await response.json();
     if (data.error) {
-      alert(data.message);
+      toast.error(data.error);
     } else {
-      alert("amjilttai soligdloo");
+      toast.success("amjilttai soligdloo");
     }
   };
 
   return (
     <bankCardContext.Provider value={{ createBankCard, changeBankCard }}>
+      <Toaster position="top-center" richColors />
       {children}
     </bankCardContext.Provider>
   );

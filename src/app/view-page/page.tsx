@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useUser } from "../_context/UsersContext";
 import Image from "next/image";
 import { Camera, Coffee, Heart } from "lucide-react";
@@ -55,7 +55,7 @@ const ViewPage = () => {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit() {
     setLoading(true);
     const uploadedImsageUrl = await handleUpload(file);
     try {

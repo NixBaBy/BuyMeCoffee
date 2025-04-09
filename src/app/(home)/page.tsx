@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUser } from "../_context/UsersContext";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useDonation } from "../_context/DonationContext";
 import { donationINNERJOINType } from "../../../utils/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
