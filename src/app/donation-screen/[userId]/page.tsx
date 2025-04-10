@@ -250,7 +250,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Sending..." : "Support"}
                 </Button>
               </form>

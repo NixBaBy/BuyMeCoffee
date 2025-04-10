@@ -2,12 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { runQuery } from "../../../../../utils/server/queryService";
 import { profileType, userType } from "../../../../../utils/types";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { userId: string } }
-): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const userId = params.userId;
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
     if (!userId) {
       return new NextResponse(JSON.stringify({ error: "Missing user ID" }), {
