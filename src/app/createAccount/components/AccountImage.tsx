@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";

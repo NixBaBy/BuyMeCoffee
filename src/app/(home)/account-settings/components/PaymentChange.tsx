@@ -27,10 +27,14 @@ import { useUser } from "@/app/_context/UsersContext";
 const PaymentChange = () => {
   const [loading, setLoading] = useState(false);
   const { changeBankCard } = useBankCard();
+  const { users } = useUser();
   const { logedUser } = useUser();
   if (!logedUser?.BankCard) {
     <p>...loading</p>;
   }
+  const filteredUser = users.find(
+    (user) => user?.BankCard?.id === logedUser?.BankCard
+  );
 
   const formSchema = z.object({
     country: z.string().min(1, { message: "Country selection is required." }),
@@ -54,17 +58,17 @@ const PaymentChange = () => {
       message: "Username must be at least 2 characters.",
     }),
   });
-  console.log(logedUser);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      country: logedUser?.BankCard?.country || "",
-      firstName: logedUser?.BankCard?.firstName || "",
-      lastName: logedUser?.BankCard?.lastName || "",
-      card: logedUser?.BankCard?.cardNumber || "",
+      country: filteredUser?.BankCard?.country || "",
+      firstName: filteredUser?.BankCard?.firstName || "",
+      lastName: filteredUser?.BankCard?.lastName || "",
+      card: filteredUser?.BankCard?.cardNumber || "",
       expires: "",
       year: "",
-      cvc: logedUser?.BankCard?.cvc || "",
+      cvc: filteredUser?.BankCard?.cvc || "",
     },
   });
 

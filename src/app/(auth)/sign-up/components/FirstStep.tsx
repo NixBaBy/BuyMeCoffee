@@ -15,15 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-const page = ({
+const Page = ({
   currentStep,
   setCurrentStep,
-  name,
   setName,
 }: {
   currentStep: number;
   setCurrentStep: Dispatch<number>;
-  name: string;
   setName: Dispatch<string>;
 }) => {
   const formSchema = z.object({
@@ -80,4 +78,4 @@ const page = ({
   );
 };
 
-export default page;
+export default Page;

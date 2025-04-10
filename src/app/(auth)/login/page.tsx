@@ -15,9 +15,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/app/_context/UsersContext";
 
-const page = () => {
-  const { loginUser } = useUser();
+const Page = () => {
   const [loading, setLoading] = useState(false);
+  const { loginUser } = useUser();
 
   const formSchema = z.object({
     email: z.string().email(),
@@ -105,4 +105,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -17,11 +17,12 @@ type userContextType = {
   logedUser: userType | null;
   logoutHandler: () => void;
   signUp: (email: string, password: string, username: string) => void;
-  changePassword: (email: string, password: string) => {};
+  changePassword: (email: string, password: string) => void;
   getData: () => void;
 };
 
 const userContext = createContext<userContextType>({} as userContextType);
+
 export const useUser = () => {
   return useContext(userContext);
 };

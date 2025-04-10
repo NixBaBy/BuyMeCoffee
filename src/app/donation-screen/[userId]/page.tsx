@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useDonation } from "@/app/_context/DonationContext";
-import { donationINNERJOINType } from "../../../../utils/types";
+import { donationINNERJOINType, userType } from "../../../../utils/types";
 
 const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   const [unwrappedParams, setUnwrappedParams] = useState<{
@@ -28,13 +28,13 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   } | null>(null);
 
   const { users } = useUser();
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<userType | null>(null);
   const searchParams = useSearchParams();
   const { sentDonation } = useDonation();
   const { logedUser } = useUser();
   const { donations } = useDonation();
   const [loading, setLoading] = useState<boolean>(false);
-
+  console.log(userData);
   const formSchema = z.object({
     amount: z.string().min(0, {
       message: "required",
@@ -71,7 +71,7 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
   useEffect(() => {
     if (users && userIdFromParams) {
       const user = users.find((user) => user.id === Number(userIdFromParams));
-      setUserData(user);
+      setUserData(user || null);
     }
   }, [users, userIdFromParams]);
 
@@ -116,30 +116,30 @@ const Page = ({ params }: { params: Promise<{ userId: string }> }) => {
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <div className="flex gap-3 w-full">
               <Image
-                src={userData?.avatarImage || "/placeholder.jpg"}
+                src={userData?.profile?.avatarImage || "/placeholder.jpg"}
                 width={48}
                 height={48}
                 alt=""
                 className="rounded-full"
               />
-              <p className="font-bold text-[20px]">{userData?.name}</p>
+              <p className="font-bold text-[20px]">{userData?.profile?.name}</p>
             </div>
             <div className="w-full bg-gray-200 h-[1px]"></div>
             <div className="flex flex-col gap-3">
-              <p className="font-bold">About {userData?.name}</p>
-              <p>{userData?.about}</p>
+              <p className="font-bold">About {userData?.profile?.name}</p>
+              <p>{userData?.profile?.about}</p>
             </div>
           </div>
           <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
             <p className="font-bold">Social media URL</p>
-            <p className="text-[14px]">{userData?.socialMediaURL}</p>
+            <p className="text-[14px]">{userData?.profile?.socialMediaURL}</p>
           </div>
           {filteredDonations.length === 0 ? (
             <div className="p-6 gap-2 flex flex-col border border-solid border-gray-200 rounded-[8px] w-full bg-white">
               <p className="font-bold">Recent Supporters</p>
               <div className="p-6 flex flex-col gap-6 border border-solid border-gray-200 rounded-lg justify-center items-center bg-white">
                 <Heart />
-                <p>Be the first one to support {userData?.name}</p>
+                <p>Be the first one to support {userData?.profile?.name}</p>
               </div>
             </div>
           ) : (

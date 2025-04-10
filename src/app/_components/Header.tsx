@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/popover";
 import Link from "next/link";
 import { useUser } from "../_context/UsersContext";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 

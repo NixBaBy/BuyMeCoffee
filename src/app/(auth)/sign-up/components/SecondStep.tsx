@@ -102,8 +102,12 @@ const SecondStep = ({ name }: { name: string }) => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full bg-[#18181B] text-white">
-            Continue
+          <Button
+            type="submit"
+            className="w-full bg-[#18181B] text-white"
+            disabled={loading}
+          >
+            {loading ? "loading..." : "Continue"}
           </Button>
         </form>
       </Form>

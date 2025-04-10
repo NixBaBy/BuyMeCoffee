@@ -48,7 +48,7 @@ export async function POST(req: Request): Promise<Response> {
       recipientId,
     ]);
 
-    let DonationId = newDonation[0].id;
+    const DonationId = newDonation[0].id;
 
     const updateDonationQuery = `
   UPDATE "user"
@@ -60,10 +60,7 @@ export async function POST(req: Request): Promise<Response> {
   WHERE profile = $2;
 `;
 
-    const result = await runQuery(updateDonationQuery, [
-      DonationId,
-      recipientId,
-    ]);
+    await runQuery(updateDonationQuery, [DonationId, recipientId]);
 
     return new NextResponse(
       JSON.stringify({

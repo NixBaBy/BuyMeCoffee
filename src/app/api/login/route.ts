@@ -91,6 +91,7 @@ export async function POST(req: Request): Promise<Response> {
       ]);
       userData = { ...userData, BankCard: BankCard[0] };
     }
+    console.log("bankcaaaaaaaaaaaaaaard", userData.BankCard);
 
     const isPasswordValid = await bcrypt.compare(password, userData.password);
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,7 +6,6 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import ChangePassword from "./components/ChangePassword";
 import PaymentChange from "./components/PaymentChange";
 import { useUser } from "@/app/_context/UsersContext";
-import { Camera } from "lucide-react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ import SuccessMessage from "./components/SuccessMessage";
 import { handleUpload } from "@/lib/handle-upload";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -54,6 +54,11 @@ const page = () => {
       img: "",
     },
   });
+  useEffect(() => {
+    if (logedUser?.profile?.avatarImage) {
+      setImage(logedUser.profile?.avatarImage);
+    }
+  }, [logedUser]);
 
   if (!logedUser?.profile) {
     return <p>Loading...</p>;
@@ -78,12 +83,6 @@ const page = () => {
       // setImage(imgUrl);
     }
   };
-
-  useEffect(() => {
-    if (logedUser.profile?.avatarImage) {
-      setImage(logedUser.profile?.avatarImage);
-    }
-  }, [logedUser]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
@@ -251,4 +250,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

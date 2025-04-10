@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { ChangeEvent, useState } from "react";
 import { useUser } from "../_context/UsersContext";
@@ -59,7 +60,7 @@ const ViewPage = () => {
     setLoading(true);
     const uploadedImsageUrl = await handleUpload(file);
     try {
-      const response = await fetch("http://localhost:3000/api/profile", {
+      await fetch("http://localhost:3000/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
