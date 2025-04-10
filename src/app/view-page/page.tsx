@@ -60,7 +60,7 @@ const ViewPage = () => {
     setLoading(true);
     const uploadedImsageUrl = await handleUpload(file);
     try {
-      await fetch("http://localhost:3000/api/profile", {
+      await fetch("/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

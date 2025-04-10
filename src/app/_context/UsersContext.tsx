@@ -37,7 +37,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const fetchLoggedUser = async (logedId: string) => {
-    const res = await fetch(`http://localhost:3000/api/login/${logedId}`);
+    const res = await fetch(`/api/login/${logedId}`);
     if (!res.ok) {
       console.log("Алдаа гарлаа:", res.status);
       return;
@@ -48,7 +48,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
 
   const getData = async () => {
     setLoading(false);
-    const res = await fetch(`http://localhost:3000/api/login`);
+    const res = await fetch(`/api/login`);
     if (!res.ok) {
       console.log("Алдаа гарлаа:", res.status);
       return;
@@ -59,7 +59,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const loginUser = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const changePassword = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("/api/login", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-    const response = await fetch("http://localhost:3000/api/sign-up", {
+    const response = await fetch("/api/sign-up", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

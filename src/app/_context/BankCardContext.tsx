@@ -68,7 +68,7 @@ const BankCardProvider = ({ children }: { children: ReactNode }) => {
     cvc: string,
     id: number
   ) => {
-    const response = await fetch("http://localhost:3000/api/bank-card", {
+    const response = await fetch("/api/bank-card", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
